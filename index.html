@@ -70,7 +70,7 @@
         <li><strong>Log in to <a href="https://www.kissr.com/">KISSr</a> using your DropBox account.</strong> (This is a web service that uses your Dropbox account for storage.) Create your subdomain of the form: <tt>_____.kissr.com</tt> where <tt>_____</tt> is replaced with a name you choose. Pick something good because you can't easily change it once you start using it. KISSr allows a minimal level of service for free (1000 web requests, that is HTTP GETs, per month).
         </li>
         <li><strong>Download and install <a href="http://brackets.io/">Brackets</a></strong>, a free HTML editor that's really good. You might also like <a href="https://atom.io/">Atom</a>. You can use any HTML editor, so feel free to use another one if you can find a better one, but for the rest of this tutorial I will assume you are using Brackets. Your editor doesn't need any special upload capability because you're just going to edit your site locally and Dropbox Sync will automatically upload your changes to your Dropbox storage.</li>
-        <li>In Brackets, or whatever HTML editor you are using, use <strong>File->Open Folder</strong> and open up the <strong>Dropbox\Apps\KISSr</strong> folder on your local hard drive.
+        <li>In Brackets, or whatever HTML editor you are using, use <strong>File->Open Folder</strong> and open up the <strong>Dropbox\Apps\KISSr</strong> folder on your local hard drive.</li>
         <li>Now, in Brackets in the sidebar on the left that says "Working Files" at the top, you will see a domain name like <strong>makeyourownsite.kissr.com</strong> or whatever you named your domain name when you set up KISSr. Click on that, it will open, and you will see an index.html. Click the index.html to start editing. You can put other html and image files in this directory too.</li>
         <li><strong>To upload images</strong>, open a File Browser (File Explorer or Finder) window on your computer, go to the <strong>Dropbox\Apps\KISSr\yourownsite.kissr.com</strong> folder and just drag them in there.<br>
             <strong>TIP:</strong> I strongly recommend creating a subdirectory called <strong>img</strong> or something similar and placing all your images in there. That will help keep things from getting so cluttered.</li>
@@ -112,11 +112,15 @@
 
     <h2>What do I do next?</h2>
 
-    <h3>Using GitPages</h3>
 
-    <p>KISSr limits your usage to 1000 page views per month with the free account. You might want to try using <a href="https://pages.github.com/">GitPages</a> which doesn't have this limitation, but it's a little harder to use because you will need to learn to use <a href="https://github.com/">Git</a> to upload your files. This isn't too hard though, and there are GUI-based Git clients for Windows and Mac.</p>
+    <h3>Consider Using GitPages</h3>
+
+    <p>KISSr limits your usage to 1000 page views per month with the free account. You might want to try using <a href="https://pages.github.com/">GitPages</a> which doesn't have this limitation, but it's a little harder to use because you will need to learn to use <a href="https://github.com/">Git</a> to upload your files. This isn't too hard, and there are GUI-based Git clients for Windows and Mac.</p>
+
+    <p>(Technically you can just upload files to a Git project using your web browser, but this is annoying enough, to me anyway, that I recommend learning to use the windows/mac Gui client provided by GitHub. But, unlike Dropbox, it will not automatically sync files for you! It is still easier than uploading individual files.)
 
     <p>GitPages has the limitation that you can only have one site per user or Git project.</p>
+
 
     <h3>Other Code Practice Sandboxes and Playgrounds</h3>
 
@@ -128,17 +132,25 @@
       <li><a href="https://jsfiddle.net/">JSFiddle</a> is similar to the previous two but has ProcessingJS as a library option.</li>
     </ul>
 
+
+    <h3>Experiment With Local Virtual Servers</h3>
+
+    <p><strong>This is very advanced, so be prepared to learn a lot of stuff if you want to do this.</strong></p>
+
+    <p>Once you are familiar with creating simple web sites you might eventually want to get more advanced by using things like SQL and server-side scripting. You can experiment with this on your own computer using free virtual machine software. For that you will need to <a href="https://www.codecademy.com/learn/learn-the-command-line">learn to use the shell command line</a> in a terminal window.</p>
+
+    <p>You can download <a href="https://www.virtualbox.org/wiki/Downloads">VirtualBox</a> (Virtual Machine emulator) and run a <a href="https://bitnami.com/stack/mean/virtual-machine">virtual machine image</a> installed with <a href="http://meanjs.org/">MEAN.JS</a> for example. There are a lot of other <a href="https://bitnami.com/stacks">virtual machine images</a> that you can experiment with. The LAMP, WAMP (things ending in AMP) images all provide PHP and SQL servers.</p>
+
+
     <h3>Virtual Web Server Hosting</h3>
 
-    <p>Once you are familiar with creating simple web sites you might eventually want to get more advanced by using things like SQL and server-side scripting. For that you will need a "real" web hosting account that provides a virtual server with "full stack" server-side scripting engines and a database server.</p>
+    <p>Once you're familiar with virtual servers, you might want to create your own web site based on one. For that you will need a "real" web hosting account that provides a virtual server with "full stack" server-side scripting engines and a database server.</p>
 
-    <p><strong>This is very advanced, so you will need to learn a lot about web devlopment before you can make good use of an environment like this.</strong> Here are some recommendations.</p>
+    <p><strong>This is very advanced, so you will need to learn a lot about web devlopment before you can make good use of an environment like this. Get comfortable with running a virtual server on your own computer first.</strong> Here are some recommendations.</p>
 
     <p>A <a href="https://www.digitalocean.com/products/one-click-apps/lamp/">virtual server hosting account</a> running a <a href="https://en.wikipedia.org/wiki/LAMP_(software_bundle)">LAMP</a> (Linux, Apache, MySQL, PHP) installation will do pretty much anything that one could want, but the server-side scripting requires knowing PHP which can be learned at <a href="https://www.codecademy.com">CodeAcademy</a> or <a href="http://www.programmr.com/">Programmr</a>.</p>
 
     <p>A <a href="https://www.digitalocean.com/products/one-click-apps/mean/">virtual server hosting account</a> running <a href="http://meanjs.org/">MEAN.JS</a> provides an environment with <a href="http://docs.mongodb.org/manual/">MongoDB</a> and <a href="http://expressjs.com/">Express.js</a> plus <a href="https://nodejs.org/">Node.JS</a> for server-side scripting. This is a little more sophisticated than the previous option but it entirely uses JavaScript so learning PHP isn't necessary. Learning the JavaScript frameworks (Express.js, Node.js, and Angular.js) is necessary though, and you can learn more about some of those on <a href="https://www.codecademy.com/learn">CodeAcademy</a>. You can experiment with Node.JS and Express.JS at <a href="https://hyperdev.com/">HyperDev</a>.</p>
-
-    <p>You can also download <a href="https://www.virtualbox.org/wiki/Downloads">VirtualBox</a> (Virtual Machine emulator) and run a <a href="https://bitnami.com/stack/mean/virtual-machine">virtual machine image installed with MEAN</a>.
 
     <p>Keep in mind virtual servers are an advanced topic and you want to be very comfortable with creating static web sites before delving into virtual servers, server-side scripting, and databases! These are hard core professional level environments.</p>
 
