@@ -1,0 +1,198 @@
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Make Your Own Public Web Site</title>
+    <style>
+
+        body {
+            width:80%;
+            margin: auto;
+            font-family: sans-serif;
+        }
+        
+        p.canvas {
+            margin: 5%;
+        }
+        
+        h1 {
+            margin-top: 1em;
+        }
+        
+        h2 { }
+        
+        li {
+            margin-bottom: 0.5em;
+        }
+        
+        li li {margin-top: 0.5em;}
+        
+        pre {
+            margin-bottom:0;
+            padding-bottom:0;
+        }
+        
+        .warning {
+            color: rgb(203, 0, 0);
+            font-weight: bold;
+        }
+        
+        p.canvas {
+            text-align: center;
+        }
+        
+        p.credits {
+            font-size: 60%;
+        }
+        
+    </style>
+</head>
+<body>
+
+    <h1>How to Make Your Own Public Web Site</h1>
+    
+    <p class="warning">If you are under 18, please ask your parents before setting up your own web site!</p>
+    
+    <p>This page was made using the exact instructions described here.</p>
+
+    <h2>Site Setup for Basic HTML/CSS</h2>
+    <p class="text">Here's how you can make your own simple static web site that anyone can browse. Anything you learned about HTML, CSS, and JavaScript will work here. SQL is not supported.</p>
+    <ol>
+        <li><strong>Set up a Dropbox Account.</strong> (This is a cloud file storage service that gives you 5GB for free.)
+        <ol>
+        <li>Create an account on <a href="http://www.dropbox.com">Dropbox.com</a></li>
+        <li>Install the <a href="https://www.dropbox.com/install">Dropbox Software</a> on your computer. (This is optional, but it will make editing much easier. It automatically syncs the Dropbox folder on your computer to your Dropbox account. Therefore, you won't have to do any manual file uploads.) Make sure to use the software to sign in with your DropBox account after installing it.</li>
+        </ol></li>
+        <li><strong>Log in to <a href="https://www.kissr.com/">KISSr</a> using your DropBox account.</strong> (This is a web service that uses your Dropbox account for storage.) Create your subdomain of the form: <tt>_____.kissr.com</tt> where <tt>_____</tt> is replaced with a name you choose. Pick something good because you can't easily change it once you start using it. KISSr allows a minimal level of service for free (1000 web requests, that is HTTP GETs, per month).
+        </li>
+        <li><strong>Download and install <a href="http://brackets.io/">Brackets</a></strong>, a free HTML editor that's really good. You might also like <a href="https://atom.io/">Atom</a>. You can use any HTML editor, so feel free to use another one if you can find a better one, but for the rest of this tutorial I will assume you are using Brackets. Your editor doesn't need any special upload capability because you're just going to edit your site locally and Dropbox Sync will automatically upload your changes to your Dropbox storage.</li>
+        <li>In Brackets, or whatever HTML editor you are using, use <strong>File->Open Folder</strong> and open up the <strong>Dropbox\Apps\KISSr</strong> folder on your local hard drive.
+        <li>Now, in Brackets in the sidebar on the left that says "Working Files" at the top, you will see a domain name like <strong>makeyourownsite.kissr.com</strong> or whatever you named your domain name when you set up KISSr. Click on that, it will open, and you will see an index.html. Click the index.html to start editing. You can put other html and image files in this directory too.</li>
+        <li><strong>To upload images</strong>, open a File Browser (File Explorer or Finder) window on your computer, go to the <strong>Dropbox\Apps\KISSr\yourownsite.kissr.com</strong> folder and just drag them in there.<br>
+            <strong>TIP:</strong> I strongly recommend creating a subdirectory called <strong>img</strong> or something similar and placing all your images in there. That will help keep things from getting so cluttered.</li>
+        <li><strong>You are now done with setup!</strong> Now all you have to do is create your site and tell people about it.</li>
+    </ol>
+
+    <p class="canvas" style="float:right;"> 
+	<!--This draws the Canvas on the webpage -->
+      <canvas id="mycanvas"></canvas><br>
+        This is <a href="https://www.khanacademy.org/computer-programming/spin-off-of-project-paint-splatter/5316498611372032">Paint Splatter</a> from Khan Academy.
+    </p>
+
+    <h2>Setup for Running ProcessingJS Programs from Khan Academy</h2>
+
+    <p>This is not too difficult. Really you just need to use the <a href="https://www.khanacademy.org/computer-programming/processingjs-inside-webpages-template/5157014494511104">ProcessingJS Template</a> from the Khan Acdemy web site.</p>
+    <p>Just copy the necessary parts of the template to your HTML file and replace this entire part:</p>
+    <pre>
+    // ProgramCodeGoesHere
+    fill(255, 255, 0);
+    ellipse(200, 200, 200, 200);
+    noFill();
+    stroke(0, 0, 0);
+    strokeWeight(2);
+    arc(200, 200, 150, 100, 0, PI);
+    fill(0, 0, 0);
+    ellipse(250, 200, 10, 10);
+    ellipse(153, 200, 10, 10);</pre>
+    <p>With your own code. Put the HTML tag for the canvas wherever you want the program's canvas to appear. There is an example program over to the right so you can see how it works. You can also use <strong>View Source</strong> in your browser to view the HTML of this page to see how I created it.</p>
+    
+    <p>You can CSS style the canvas tag to control the placement and margin of the canvas. If you want a different canvas size or frame rate, change<strong></strong> the numbers in this part of the code:<pre>
+    with (processingInstance) {
+        size(600, 600); 
+        frameRate(30);</pre>
+    
+    <p><strong>NOTE:</strong> You might need to make some minor code changes to get your code working outside of KA. <a href="https://khanacademy.zendesk.com/hc/en-us/articles/202260404-What-parts-of-ProcessingJS-does-Khan-Academy-support-">See here</a> for some differences between KA and the standard ProcessingJS library.</p>
+    
+    <p><strong>TIP:</strong> There is no "oh noes the error buddy" on real web pages! The training wheels are off now and you are in the same realm as professional web developers. To see errors, look for the <strong>JavaScript Console</strong> in your browser window. On my browser it is under <strong>Tools->Web Developer->Web Console.</strong></p>
+    
+    <h2>What do I do next?</h2>
+    
+    <h3>Using GitPages</h3>
+    
+    <p>KISSr limits your usage to 1000 page views per month with the free account. You might want to try using <a href="https://pages.github.com/">GitPages</a> which doesn't have this limitation, but it's a little harder to use because you will need to learn to use <a href="https://github.com/">Git</a> to upload your files. This isn't too hard though, and there are GUI-based Git clients for Windows and Mac.</p>
+    
+    <p>GitPages has the limitation that you can only have one site per user or Git project.</p>
+    
+    <h3>Virtual Web Server Hosting</h3>
+    
+    <p>Once you are familiar with creating simple web sites you might eventually want to get more advanced by using things like SQL and server-side scripting. For that you will need a "real" web hosting account that provides a virtual server with server-side scripting engines and a database server.</p>
+    
+    <p><strong>This is very advanced, so you will need to learn a lot about web devlopment before you can make good use of an environment like this.</strong> Here are some recommendations.</p>
+    
+    <p>A <a href="https://www.digitalocean.com/products/one-click-apps/lamp/">virtual server hosting account</a> running a <a href="https://en.wikipedia.org/wiki/LAMP_(software_bundle)">LAMP</a> (Linux, Apache, MySQL, PHP) installation will do pretty much anything that one could want, but the server-side scripting requires knowing PHP which can be learned at <a href="https://www.codecademy.com">CodeAcademy</a> or <a href="http://www.programmr.com/">Programmr</a>.</p>
+
+    <p>A <a href="https://www.digitalocean.com/products/one-click-apps/mean/">virtual server hosting account</a> running <a href="http://meanjs.org/">MEAN.JS</a> provides an environment with <a href="http://docs.mongodb.org/manual/">MongoDB</a> for SQL and <a href="http://expressjs.com/">Express.js</a> plus  <a href="https://nodejs.org/">Node.JS</a> for server-side scripting. This is a little more sophisticated than the previous option but it entirely uses JavaScript so learning PHP isn't necessary. Learning the JavaScript frameworks (Express.js, Node.js, and Angular.js) is necessary though, and you can learn more about some of those on <a href="https://www.codecademy.com/learn">CodeAcademy</a>.</p>
+    
+    <p>Keep in mind virtual servers are an advanced topic and you want to be very comfortable with creating static web sites before delving into virtual servers, server-side scripting, and SQL databases! These are hard core professional level environments.</p>
+    
+    <p class="credits">Created by <a href="https://www.khanacademy.org/profile/KnowMoreStuff/">KnowMoreStuff</a> on KA.</p>
+    </body>
+
+<!-- Run all the JavaScript stuff -->
+<!-- Include the processing.js library -->
+<!-- See https://khanacademy.zendesk.com/hc/en-us/articles/202260404-What-parts-of-ProcessingJS-does-Khan-Academy-support- for differences -->
+<script src="https://cdn.jsdelivr.net/processing.js/1.4.8/processing.min.js"></script> 
+
+<script>
+var sketchProc = function(processingInstance) {
+ with (processingInstance) {
+    size(600, 600); 
+    frameRate(30);
+
+    // ProgramCodeGoesHere
+
+
+noStroke();
+
+var paintSplat = function () {
+    var rb = random(0,250);
+    var gb = random(0,250);
+    var bb = random(0,250);
+    
+    for (var i = 0; i < 500; i++) {
+        var x = randomGaussian () * 71;
+        var y = randomGaussian () * 120;
+        var d = dist(0,0,x,y);
+        var s = pow((width/1.4 - d) / 22,1.50);
+        var r = randomGaussian () * d/15 + rb;
+        var g = randomGaussian () * d/15 + gb;
+        var b = randomGaussian () * d/15 + bb;
+        var c = color(r, g, b, 180);
+    
+        fill(c);
+        ellipse(x, y, s, s);
+    }
+};
+
+//translate(width/2,height/2);
+//paintSplat();
+
+mouseClicked = function() {
+    noStroke();
+
+    pushMatrix();
+    translate(mouseX,mouseY);
+    scale(0.7,0.7);
+    rotate(randomGaussian () * 157);
+    paintSplat();
+    popMatrix();
+};
+
+fill(0, 0, 0);
+textSize(50);
+textAlign(CENTER, CENTER);
+text("Click mouse here to splatter!",0,0,width,height); 
+     
+}};
+
+// Get the canvas that Processing-js will use
+var canvas = document.getElementById("mycanvas"); 
+// Pass the function sketchProc (defined in myCode.js) to Processing's constructor.
+var processingInstance = new Processing(canvas, sketchProc); 
+</script>    
+
+</html>
