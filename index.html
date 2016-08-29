@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+<!--    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
+-->
+    <meta name="description" content="Create your own web site, mostly for Khan Academy users.">
+    <meta name="author" content="Robert Stone">
 
     <title>Make Your Own Public Web Site</title>
     <style>
@@ -15,23 +16,24 @@
             color: #111111;
             font-family: sans-serif;
             max-width: 1024px;
+            font-size: 120%;
         }
-        
-        p.canvas {
-            margin: 5%;
+
+        p {
+            line-height: 150%;
         }
-        
+
         h1 {
             margin-top: 1em;
-            font-size: 30pt;
-            /* background-color: #ccccff; */
+            font-size: 48pt;
+            text-align: center;
             color: #ffffff;
             background-color: #0000aa;
             border: 0.3em;
             border-color: #0000aa;
             border-style: solid;
         }
-        
+
         h2 {
             margin-top: 1.5em;
             background-color: #cccccc;
@@ -39,57 +41,75 @@
             border-color: #cccccc;
             border-style: solid;
         }
-        
+
         h3 {
             margin-top: 1.5em;
         }
-        
+
+        div.step-reset {
+            counter-reset: step;
+        }
+        h3.step {
+            counter-increment: step;
+        }
+        h3.step::before {
+            content: "Step " counter(step) ":";
+        }
+
         li {
             margin-top: 1em;
             margin-bottom: 1em;
         }
-        
+
         li li {
             margin-top: 0.5em;
         }
-        
-        pre {
-            margin-bottom: 0;
-            padding-bottom: 0;
+
+        div.code {
+            font-family: monospace;
+            font-size: 1.3em;
+            white-space: pre-wrap;
+            border: solid #aaaaaa 3px;
+            border-style: outset;
+            color: white;
+            background-color: #222222;
+            margin: 1em;
+            padding: 0 1em 1em 0;
+            ;
         }
-        
-        .warning {
-            color: rgb(203, 0, 0);
-            font-weight: bold;
-        }
-        
-        .code {
+
+        span.code {
             font-family: monospace;
             /* font-weight: bold; */
             font-size: 1.3em;
         }
-        
+
+        .warning {
+            color: rgb(203, 0, 0);
+            font-weight: bold;
+        }
+
         div.canvas {
             text-align: center;
-            margin: 3em;
+            margin: 2em;
         }
-        
+
         p.credits {
             font-size: 60%;
             margin-bottom: 10em;
             margin-top: 1em;
         }
-        
+
         a:link {
             color: #CC0022;
             /* font-weight: bold; */
         }
-        
+
         a:active {
             color: #FF3355;
             font-weight: bold;
         }
-        
+
         a:visited {
             color: #770011;
             font-weight: normal;
@@ -106,7 +126,7 @@
 
     <h2>Introduction</h2>
 
-    <p>This page was created primarily for people who have learned HTML/CSS and possibly JavaScript+Processing.js on <a href="https://www.khanacademy.org/">Khan Academy</a>. Users there are constantly asking "how do I create an actual public web site?" Since Khan Academy only provides a sandbox for educational purposes, I set out to find the easiest way for KA users to get started on creating their own public web site.</p>
+    <p>This page was created primarily for people who have learned HTML/CSS and possibly JavaScript+Processing.js on <a href="https://www.khanacademy.org/">Khan Academy</a>. Users there are constantly asking "how do I create a real web site?" Khan Academy only provides a sandbox for educational purposes, not web site hosting services. This guide will explain how to use other services to create a web site that anyone on the Internet can browse.</p>
 
     <h2>What Should I Have Learned Before Proceeding?</h2>
 
@@ -121,11 +141,11 @@
 
     <h2>How am I going to do this? How much does it cost?</h2>
 
-    <p>Nothing. These instructions will describe how to set up a very simple static web site using the cloud file storage service <a href="http://www.dropbox.com">Dropbox.com</a> and the web hosting service <a href="https://www.kissr.com/">KISSr</a>.</p>
+    <p>These instructions will describe how to set up a very simple static web site using the cloud file storage service <a href="http://www.dropbox.com">Dropbox.com</a> and the web hosting service <a href="https://www.kissr.com/">KISSr</a>. This is free for a basic level of service.</p>
 
     <p>Dropbox will give you 2GB of cloud storage for free, and KISSr will let you set up one site that provides 1,000 web requests per month for free. This is plenty to get started with.</p>
 
-    <p><strong>This page was set up using the exact instructions described here.</strong></p>
+    <p>This page was set up using the exact instructions described here.</p>
 
     <h2>Site Setup for HTML/CSS/JS</h2>
     <p class="text">Here's how you can make your own simple static web site that anyone can browse. Anything you learned about HTML, CSS, and JavaScript will work in this environment. <strong>SQL is not supported.</strong></p>
@@ -162,14 +182,9 @@
 
     <h3>Processing.js Template</h3>
 
-    <div class="canvas" style="float:right;">
-        <!--This draws the ProcessigJS Canvas on the web page -->
-        <canvas id="mycanvas"></canvas><br> This is <a href="https://www.khanacademy.org/computer-programming/spin-off-of-project-paint-splatter/5316498611372032">Paint Splatter</a> from Khan Academy.
-    </div>
-
     <p>The main thing you need is the <a href="https://www.khanacademy.org/computer-programming/processingjs-inside-webpages-template/5157014494511104">Processing.js Template</a> from the Khan Academy web site.</p>
     <p>Just copy the necessary parts of the template to your HTML file and replace this entire part:</p>
-    <pre>
+    <div class="code">
     // ProgramCodeGoesHere
     fill(255, 255, 0);
     ellipse(200, 200, 200, 200);
@@ -179,15 +194,23 @@
     arc(200, 200, 150, 100, 0, PI);
     fill(0, 0, 0);
     ellipse(250, 200, 10, 10);
-    ellipse(153, 200, 10, 10);</pre>
+    ellipse(153, 200, 10, 10);
+</div>
 
-    <p>With your own code. Put the &lt;canvas&gt; tag wherever you want the program's canvas to appear. There is an example program over to the right so you can see how it works. You can also use <strong>View Source</strong> in your browser to view the HTML of this page to see how I created it.</p>
+    <p>With your own code. Put the &lt;canvas&gt; tag wherever you want the program's canvas to appear. There is an example program below so you can see how it works. You can also use <strong>View Source</strong> in your browser to view the HTML of this page to see how I created it.</p>
+
+    <div class="canvas">
+        <!--This draws the ProcessigJS Canvas on the web page -->
+        <canvas id="mycanvas"></canvas><br> This is <a href="https://www.khanacademy.org/computer-programming/spin-off-of-project-paint-splatter/5316498611372032">Paint Splatter</a> from Khan Academy.
+    </div>
+
 
     <p>You can CSS style the canvas tag to control the placement and margin of the canvas. If you want a different canvas size or frame rate, change the numbers in this part of the code:</p>
-<pre>
+<div class="code">
     with (processingInstance) {
         size(400, 400);
-        frameRate(30);</pre>
+        frameRate(30);
+</div>
 
     <h3>Differences Between Khan Academy's Processing.js and the Standard Version</h3>
 
@@ -342,7 +365,6 @@
     <p>If you've made it this far and managed to at lest tinker with everything mentioned here then congratulations! But you're still not a professional web developer just yet. There's stil quite a bit to learn about things like user interaction, usability, software engineering practices, and application design. But hopefully all of this has at least gotten you started toward crating the next killer web app.</p>
 
     <p class="credits">Created by <a href="https://www.khanacademy.org/profile/KnowMoreStuff/">KnowMoreStuff</a> on KA.</p>
-</body>
 
     <!-- Run all the JavaScript stuff -->
     <!-- Include the processing.js library -->
@@ -405,5 +427,5 @@
         // Pass the function sketchProc (defined in myCode.js) to Processing's constructor.
         var processingInstance = new Processing(canvas, sketchProc);
     </script>
-
+</body>
 </html>
