@@ -25,7 +25,8 @@
 
         h1 {
             margin-top: 1em;
-            font-size: 48pt;
+            padding: 0.5em;
+            font-size: 36pt;
             text-align: center;
             color: #ffffff;
             background-color: #0000aa;
@@ -53,7 +54,14 @@
             counter-increment: step;
         }
         h3.step::before {
-            content: "Step " counter(step) ":";
+            content: "Step " counter(step);
+            width: min-content;
+            border: solid black 1px;
+            padding: 0.2em 0.4em 0.2em 0.4em;
+            margin-right: 0.5em;
+            color: white;
+            background-color: black;
+
         }
 
         li {
@@ -67,14 +75,14 @@
 
         div.code {
             font-family: monospace;
-            font-size: 1.3em;
+            font-size: 100%;
             white-space: pre-wrap;
             border: solid #aaaaaa 3px;
             border-style: outset;
-            color: white;
-            background-color: #222222;
+            color: #00dd00;
+            background-color: #333333;
             margin: 1em;
-            padding: 0 1em 1em 0;
+            padding: 0 0em 1em 1em;
             ;
         }
 
@@ -82,11 +90,19 @@
             font-family: monospace;
             /* font-weight: bold; */
             font-size: 1.3em;
+            font-weight: bold;
+        }
+
+        div.video {
+            margin-left: auto;
+            margin-right: auto;
+            width: 560px;
         }
 
         .warning {
             color: rgb(203, 0, 0);
-            font-weight: bold;
+            font-weight: normal;
+            margin: 1em 2em 1em 2em;
         }
 
         div.canvas {
@@ -114,19 +130,32 @@
             color: #770011;
             font-weight: normal;
         }
+
     </style>
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-4313173-7', 'auto');
+        ga('send', 'pageview');
+    </script>
 </head>
 <body>
 
     <h1>How to Make Your Own Public Web Site</h1>
 
-    <p class="warning">If you are under 18, please ask your parents before setting up your own web site!</p>
-
-    <p class="warning">Disclaimer: I do not endorse, nor am I affiliated with, any of the products or services mentioned here.</p>
 
     <h2>Introduction</h2>
 
     <p>This page was created primarily for people who have learned HTML/CSS and possibly JavaScript+Processing.js on <a href="https://www.khanacademy.org/">Khan Academy</a>. Users there are constantly asking "how do I create a real web site?" Khan Academy only provides a sandbox for educational purposes, not web site hosting services. This guide will explain how to use other services to create a web site that anyone on the Internet can browse.</p>
+
+    <p class="warning">If you are under 18, please ask your parents before setting up your own web site!</p>
+
+    <p class="warning">Disclaimer: The author does not endorse, nor is he affiliated with, any of the products or services mentioned here.</p>
+
+    <p>This page was set up using the exact instructions described here.</p>
 
     <h2>What Should I Have Learned Before Proceeding?</h2>
 
@@ -139,80 +168,153 @@
         <li><a href="https://www.khanacademy.org/computing/computer-programming/html-js-jquery">HTML/JS: Making webpages interactive with jQuery</a></li>
     </ul>
 
-    <h2>How am I going to do this? How much does it cost?</h2>
+    <h2>How does this work? How much does it cost?</h2>
 
-    <p>These instructions will describe how to set up a very simple static web site using the cloud file storage service <a href="http://www.dropbox.com">Dropbox.com</a> and the web hosting service <a href="https://www.kissr.com/">KISSr</a>. This is free for a basic level of service.</p>
+    <p>These instructions will describe how to set up a very simple static web site using the cloud file storage service <a href="https://db.tt/JBhh3niM">Dropbox.com</a> and the web hosting service <a href="https://www.kissr.com/">KISSr</a>. Both are free for a basic level of service.</p>
 
     <p>Dropbox will give you 2GB of cloud storage for free, and KISSr will let you set up one site that provides 1,000 web requests per month for free. This is plenty to get started with.</p>
 
-    <p>This page was set up using the exact instructions described here.</p>
-
     <h2>Site Setup for HTML/CSS/JS</h2>
-    <p class="text">Here's how you can make your own simple static web site that anyone can browse. Anything you learned about HTML, CSS, and JavaScript will work in this environment. <strong>SQL is not supported.</strong></p>
-    <ol>
+    <p>Below are the instructions for setting up your static web site. A static web site is the simplest type of web site. There are no scripts or SQL databases running on the server. This means that <strong>SQL is not supported</strong> on this type of site.</p>
+    <p>Anything you have learned about HTML, CSS, and JavaScript will work in this environment. You can write JavaScript that will work in the browser of anyone visiting your site.</p>
 
-        <li><strong>Create a Dropbox Account.</strong> This will provide storage space for your web site, and you can use it for other purposes as well. If you already have a Dropbox account, you can skip this part since you can use your existing Dropbox
-            account with KISSr.
-            <ol>
-                <li>Create an account on <a href="http://www.dropbox.com">Dropbox.com</a></li>
-                <li>Install the <a href="https://www.dropbox.com/install">Dropbox Software</a> on your computer. The Dropbox software automatically syncs the Dropbox folder on your computer to your Dropbox account. Therefore, you won't have to do any
-                    manual file uploads. Make sure to use the software to log in with your DropBox account after installing it.</li>
-            </ol>
-        </li>
+    <div class="step-reset">
 
-        <li><strong>Log in to <a href="https://www.kissr.com/">KISSr</a> using your DropBox account.</strong> This will not disclose your Dropbox password to KISSr.</li>
+        <h3 class="step">Create a Dropbox Account</h3>
+        <p>First, you will need a Dropbox account. This will provide network storage space for your web site, and you can use it for storing other files too. If you already have a Dropbox account, you can skip this part since you can use your existing Dropbox account with KISSr.</p>
+        <ol>
+            <li>Create an account on <a href="https://db.tt/JBhh3niM">Dropbox.com</a> - Please use <a href="https://db.tt/JBhh3niM">this link</a> to help the author of this guide. That way he will get referral credit.</li>
+            <li>Install the <a href="https://db.tt/JBhh3niM">Dropbox Software</a> on your computer. The Dropbox software automatically syncs the Dropbox folder on your computer to your Dropbox account. This means you won't have to manually upload files.</li>
+        </ol>
+        <p>Here is a video about how to install Dropbox if you need help, but it is not very difficult.</p>
 
-        <li><strong>Create your subdomain</strong> of the form: <span class="code">yoursitename.kissr.com</span> where <span class="code">yoursitename</span> is replaced with a name you choose. Pick something good because you can't easily change it once you start using it.</li>
+        <div class="video">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/zAsye_RDnAg" frameborder="0" allowfullscreen></iframe>
+        </div>
 
-        <li><strong>Download and install <a href="http://brackets.io/">Brackets</a></strong>, a free HTML editor that's really good. You might also like <a href="https://atom.io/">Atom</a> or <a href="https://code.visualstudio.com/">VS Code</a>. You can use any HTML editor, so feel free to use another one if you can find a better one, but for the rest of this tutorial I will assume you are using one of those. Your editor doesn't need any special upload capability because you're just going to edit your site locally and Dropbox Sync will automatically upload your changes to your Dropbox storage.</li>
+        <h3 class="step">Log in to KISSr</h3>
+        <p>Log in to <a href="https://www.kissr.com/">KISSr</a> using your Dropbox account. This will not disclose your Dropbox password to KISSr.</p>
 
-        <li>In Brackets, or whatever HTML editor you are using, use <strong>File-&gt;Open Folder</strong> and open up the <strong>Dropbox\Apps\KISSr</strong> folder on your local hard drive.</li>
+        <p>Create your subdomain of the form: <span class="code">yoursitename.kissr.com</span> where <span class="code">yoursitename</span> is replaced with a name you choose. Pick something good because you can't easily change it once you tell everyone about it.</p>
 
-        <li>Now, in Brackets in the sidebar on the left that says "Working Files" at the top, you will see a domain name like <span class="code">yoursitename.kissr.com</span> or whatever you named your domain name when you set up KISSr. Click on that, it will open, and you will see an <span class="code">index.html</span> file. Click the index.html to start editing. You can put other html and image files in this directory too.</li>
+        <h3 class="step">Download and Install a Code Editor</h3>
+        <p>To edit the code for your site, you will need a text editor. Using a <strong>code editor</strong>, a type of text editor that is designed with HTML and other code editing in mind, is essential. Here are some options which range from easiest to more difficult. All of these are free.</p>
+        <ul>
+             <li><a href="http://brackets.io/">Brackets</a> is the easiest choice. It comes with many good features, such as a color picker, and good default settings for HTML, CSS, and JavaScript.</li>
+             <li><a href="https://atom.io/">Atom</a> has different features and is a little more complicated.</li>
+             <li><a href="https://code.visualstudio.com/">VS Code</a> is similar, but it is somewhat more advanced and more difficult to use.</li>
+        </ul>
+        <p>You can use any text editor, even Windows Notepad or OS X TextEdit, but the rest of this tutorial will assume you are using one of the code editors listed above. Your editor doesn't need any special file upload features because you're just going to edit your files locally and Dropbox Sync will automatically upload your changes to your Dropbox storage. Once uploaded to Dropbox, your files automatically become available to the web server.</p>
 
-        <li><strong>To upload images</strong>, open a File Browser (File Explorer or Finder) window on your computer, go to the <span class="code">Dropbox\Apps\KISSr\yoursitename.kissr.com</span> folder and just drag them in there.<br>
-        <strong>TIP:</strong> I strongly recommend creating a subdirectory called <span class="code">img</span> or something similar and placing all your images in there. That will help keep things from getting so cluttered.</li>
+        <p>Here is a beginner's level video about the Brackets code editor.</p>
+        <div class="video">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/GN0txxeT46A" frameborder="0" allowfullscreen></iframe>
+        </div>
 
-        <li><strong>You are now done with setup!</strong> Now all you have to do is create your site, using your HTML and CSS skills, and tell people about it.</li>
+        <h3 class="step">Launch the Editor and Open Your Site Folder</h3>
+        <p>Launch your editor, use the <strong>File-&gt;Open Folder</strong> menu option, then navigate to the <span class="code">Dropbox\Apps\KISSr</span> folder on your local hard drive. Select the folder inside that has the same name as your web site and click the <strong>Open</strong> button.</p>
 
-    </ol>
+        <h3 class="step">Edit Your index.html File</h3>
+        <p>The <span class="code">index.html</span> file is the main page on your site. In your editor in the sidebar on the left, you will see the <span class="code">index.html</span> file. Click on it to start editing. You can put other html files in the same directory, or create them from within the editor and save them in your site directory, and they will show up here.</p>
 
+        <p>Changes you make to the file, or any other files, will not be available on your web site until 1) you save the file and 2) Dropbox Sync has a few seconds to upload the file. Small files like text files sync very quickly so it will probably happen too fast for you to notice. If you have any problems, check the Dropbox status icon to see if there are any warnings or error messages.</p>
 
-    <h2>Setup for Running Processing.js Programs from Khan Academy</h2>
+        <h3 class="step">Verify Operation</h3>
 
-    <h3>Processing.js Template</h3>
+        <p>Now that you've made some sort of change to your <span class="code">index.html</span> file, load your new site in your browser to see if it's working. By now you have probably figured out that the URL will be <span class="code">http://yoursitename.kissr.com/</span> where <span class="code">yoursitename</span> is the subdomain name you used.</p>
 
-    <p>The main thing you need is the <a href="https://www.khanacademy.org/computer-programming/processingjs-inside-webpages-template/5157014494511104">Processing.js Template</a> from the Khan Academy web site.</p>
-    <p>Just copy the necessary parts of the template to your HTML file and replace this entire part:</p>
-    <div class="code">
-    // ProgramCodeGoesHere
-    fill(255, 255, 0);
-    ellipse(200, 200, 200, 200);
-    noFill();
-    stroke(0, 0, 0);
-    strokeWeight(2);
-    arc(200, 200, 150, 100, 0, PI);
-    fill(0, 0, 0);
-    ellipse(250, 200, 10, 10);
-    ellipse(153, 200, 10, 10);
+        <p>You don't need to put a filename at the end of the URL. This is because <span class="code">index.html</span> is a special filename that the server knows to look for when a specific filename is not in the URL. Any other files in the same directory will need to have their filename specified in the URL.</p>
+
+        <p>If you create a subdirectory in your site folder then you can put an <span class="code">index.html</span> file in the subdirectory, and it will return that file if someone uses the URL <span class="code">http://yoursiename.kissr.com/subdir/</span> where "subdir" is the name of the directory. Practically every single web server works ths way, so you can assume this works on any web server.</p>
+
+        <p>Notice that when you make changes to an HTML file you will need to use the page reload button on your web browser before they become visible.</p>
+
+        <p><strong>TIP:</strong> You can also just double-click on an html file from a file browser window on your desktop and this will load the file into your browser from the local hard drive. This is a good way of checking your code more quickly when you are editing it. The code editors mentioned above also have functions or extensions that will do this for you automatically every time you save a file.</p>
+
+        <h3 class="step">Upload Images for Your Site (optional)</h3>
+        <p>To upload images, open a file browser window (File Explorer in Windows or Finder in OS X) on your desktop, go to the <span class="code">Dropbox\Apps\KISSr\yoursitename.kissr.com</span> folder and just copy your images in there.</p>
+
+        <p>It is strongly recommended that you create a subdirectory called <span class="code">img</span> in your site folder and place all images in there. That will help prevent your site folder from getting too messy.</p>
+
+        <p>Once your image or images have been uploaded, you can use them with a tag like:<br /><span class="code">&lt;img src="img/myimage.jpg"&gt;</span>.</p>
+
+        <h3 class="step">Create Your Site Content</h3>
+
+        <p>You are now done with the initial setup of your new web site! Now all you have to do is keep creating your site content using your HTML, CSS, and possibly JavaScript skills. Don't forget to tell tell everyone about it.</p>
+
+        <h3 class="step">Register a Domain Name (optional)</h3>
+
+        <p>This is completely optional and it's the only thing here that costs money, but some domains are extremely cheap (less than US$1/year).</p>
+
+        <p>If you don't like the domain name <span class="code">kissr.com</span> (most people wouldn't blame you) you can register your own domain name. <a href="https://www.namecheap.com/domains.aspx">NameCheap</a> lives up to its name and will register some domains for less than US$1 per year. There is no reason why you have to use them though because there are hundreds of companies that handle domain registration. See the botton of <a href="https://www.kissr.com/pages/documentation">this page</a> for a list, or just do a web search for "domain registration".</p>
+
+        <p>Once you have registered a domain name, you will need to point a DNS record to the web server. Instructions on how to do that are <a href="https://www.kissr.com/pages/documentation">available here</a>.</p>
+
+        <p>Domain names are useful not just because you can pick your own name, but also because they allow you to move your site to a different server without changing the URL. So if you later decide to move your site to a web server with more features, all you will need to do is update the DNS record for the domain to point to the new server. Nobody will even notice that you moved your site to a different service because the URL for your site will stay the same.</p>
+
+    </div>
+
+    <h2>Oh Noes! Where is Oh Noes! the Error Buddy?</h2>
+
+    <p>He needs some rest and is sitting this one out. Actually, there is no "Oh noes! the error buddy" in a standard web browser environment!</p>
+
+    <p>The training wheels are off now, but the good news is you are in the same browser environment as professional web developers. To see errors, look for the <strong>JavaScript Console</strong> in your browser menus. On Firefox it is under <strong>Tools-&gt;Web Developer-&gt;Web Console.</strong> For this option to appear in the menus you may need to enable developer or debugging options in your browser configuration depending on which browser you are using.</p>
+
+    <p>The code editors mentioned above also have syntax checking features that can warn you of some types of errors as soon as you type them. Read the manual for your code editor to find out more about these. You may need to download and install extension packages to get some of these features.</p>
+
+    <h2>Running Processing.js Programs from Khan Academy on Your Site</h2>
+
+    <p>This part is optional. It only applies if you have created your own programs using JavaScript+Processing.js on Khan Academy and want to embed them in your site's pages.</p>
+
+    <h3>Khan Academy Processing.js Template</h3>
+
+    <p>You can use your programs from Khan Academy on your own web site, but you will need to add a little extra code to them to make them work. The main thing you need is the <a href="https://www.khanacademy.org/computer-programming/processingjs-inside-webpages-template/5157014494511104">Processing.js Template</a> from the Khan Academy web site. Here is a stripped-down version of it with the important parts:</p>
+<div class="code">
+&lt;body&gt;
+    &lt;!--Place the canvas element where you want the canvas to appear --&gt;
+    &lt;canvas id="mycanvas"&gt;&lt;/canvas&gt;
+&lt;/body&gt;
+
+&lt;!-- This causes the browser to loead the Processing.js library --&gt;
+&lt;script src="https://cdn.jsdelivr.net/processing.js/1.4.8/processing.min.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+    var sketchProc = function(processingInstance) {
+        with (processingInstance) {
+            size(400, 400);
+            frameRate(30);
+
+            // YOUR CODE STARTS HERE
+
+            /***** Replace this line with your code from KA. *****/
+
+            // YOUR CODE ENDS HERE
+        }};
+    var canvas = document.getElementById("mycanvas");
+    var processingInstance = new Processing(canvas, sketchProc);
+&lt;/script&gt;
 </div>
 
-    <p>With your own code. Put the &lt;canvas&gt; tag wherever you want the program's canvas to appear. There is an example program below so you can see how it works. You can also use <strong>View Source</strong> in your browser to view the HTML of this page to see how I created it.</p>
+    <p>Just copy the needed parts of this snippet to your HTML file and replace the indicated comment line with your code.</p>
+
+    <p>Put the <strong>&lt;canvas&gt;</strong> tag wherever you want the program's canvas to appear. There is an example program below so you can see what it will look like. If it helps any, you can also use the <strong>View Page Source</strong> function in your browser to view the HTML of this page to see how it is coded.</p>
 
     <div class="canvas">
         <!--This draws the ProcessigJS Canvas on the web page -->
-        <canvas id="mycanvas"></canvas><br> This is <a href="https://www.khanacademy.org/computer-programming/spin-off-of-project-paint-splatter/5316498611372032">Paint Splatter</a> from Khan Academy.
+        <canvas id="mycanvas"></canvas><br>This is <a href="https://www.khanacademy.org/computer-programming/spin-off-of-project-paint-splatter/5316498611372032">Paint Splatter</a> from Khan Academy.
     </div>
 
-
-    <p>You can CSS style the canvas tag to control the placement and margin of the canvas. If you want a different canvas size or frame rate, change the numbers in this part of the code:</p>
+    <p>You can CSS style the <strong>&lt;canvas&gt;</strong> element to control things like the placement and margin of the canvas. If you want a different canvas size or frame rate, change the numbers in this part of the code:</p>
 <div class="code">
+    ...
     with (processingInstance) {
         size(400, 400);
         frameRate(30);
+    ...
 </div>
 
     <h3>Differences Between Khan Academy's Processing.js and the Standard Version</h3>
+
+    <p>There are some differences between the Processing.js library used by Khan Academy and the stanard one that you will be using on your own web pages.</p>
 
     <p><strong>The good news:</strong> You can now use some Processing.js functions and JavaScript features that don't work on Khan Academy! See the following documentation for all the cool stuff you can do now:</p>
     <ul>
@@ -220,28 +322,12 @@
         <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript Reference</a> (ECMAScript 5.1)</li>
     </ul>
 
-    <p><strong>The bad news:</strong> You might need to make some minor code changes to get your code working outside of KA. <a href="https://khanacademy.zendesk.com/hc/en-us/articles/202260404-What-parts-of-ProcessingJS-does-Khan-Academy-support-">See here</a> for some differences between KA and the standard Processing.js library.</p>
-
-    <p><strong>There is no "Oh noes! the error buddy" on real web pages!</strong> The training wheels are off now, but the good news is you are in the same browser environment as professional web developers. To see errors, look for the <strong>JavaScript Console</strong> in your browser window. On my browser it is under <strong>Tools-&gt;Web Developer-&gt;Web Console.</strong></p>
+    <p><strong>The bad news:</strong> You might need to make some minor code changes to get your code working outside of KA. Fortunately, this usually only means adding a line or two of code. <a href="https://khanacademy.zendesk.com/hc/en-us/articles/202260404-What-parts-of-ProcessingJS-does-Khan-Academy-support-">See here</a> for some differences between KA and the standard Processing.js library.</p>
 
 
-    <h1>What do I do next?</h1>
+    <h1>What Should I Learn Next?</h1>
 
-    <p>For now you should focus on getting really confortable creating your own site with the static web server environment described above, especially if you are still in middle school but eventually you may want to get more advanced. Here are some suggestions on what to do and learn next.</p>
-
-
-    <h2>Intermediate Difficulty Level</h2>
-
-    <p>This is where things start to get more difficult, but you don't need to be a professional web developer yet.</p>
-
-    <h3>Read the Full HTML/CSS Reference</h3>
-
-    <p>You haven't learned everything yet. Read over, or at least poke around in, the reference documentation to see just how many things you can do with HTML and CSS:</p>
-    <ul>
-        <li>Full <a href="http://www.w3schools.com/tags/default.asp">HTML5 Element Reference</a></li>
-        <li>Full <a href="http://www.w3schools.com/cssref/default.asp">CSS3 Reference</a></li>
-    </ul>
-
+    <p>For now you should focus on getting really confortable creating your own site with the static web server environment described above, especially if you are still in middle school, but eventually you may want to get more advanced. Here are some suggestions on what to do and learn next.</p>
 
     <h3>Learn More JavaScript</h3>
 
@@ -249,7 +335,23 @@
     <ul>
         <li><a href="https://www.khanacademy.org/computing/computer-programming/programming">Intro to JS: Drawing &amp; Animation</a></li>
         <li><a href="https://www.khanacademy.org/computing/computer-programming/html-css-js">HTML/JS: Making webpages interactive</a></li>
-        <li><a href="https://www.khanacademy.org/computing/computer-programming/html-js-jquery">HTML/JS: Making webpages interactibe with jQuery</a></li>
+        <li><a href="https://www.khanacademy.org/computing/computer-programming/html-js-jquery">HTML/JS: Making webpages interactive with jQuery</a></li>
+        <li><a href="https://www.khanacademy.org/computing/computer-science/internet-intro">Internet 101</a> - How the Internet works</li>
+    </ul>
+
+    <h2>Intermediate Difficulty Level</h2>
+
+    <p>This is where things start to get more difficult, but you don't need to be a professional web developer yet.</p>
+
+    <p>Things at this level are recommended for people who are at least in high school.</p>
+
+
+    <h3>Get Familiar With the Full HTML/CSS Reference</h3>
+
+    <p>You haven't learned everything yet. Read over, or at least poke around in, the reference documentation to see just how many things you can do with HTML and CSS:</p>
+    <ul>
+        <li>Full <a href="http://www.w3schools.com/tags/default.asp">HTML5 Element Reference</a></li>
+        <li>Full <a href="http://www.w3schools.com/cssref/default.asp">CSS3 Reference</a></li>
     </ul>
 
 
@@ -259,23 +361,9 @@
 
     <p>GitPages is slightly harder to use because you will need to learn to use <a href="https://github.com/">Git</a> to upload your files.</p>
 
-    <p>While you can just upload files to a Git project using your web browser, you're strongly advised to learn how to use Git because this knowledge will come in very handy for the more advanced server hosting environments described below. I recommend learning to at least use the GUI Git client provided by GitHub.</p>
+    <p>While you can just upload files to a Git project using your web browser, learning Git is worthwhile because this knowledge will come in very handy for the more advanced server hosting environments described below. At first, at least learn to use the GUI Git client provided by GitHub.</p>
 
-    <p>GitPages has the limitation that you can only have one site per user or Git project. Also, <strong>everything you upload there is public to the world unless you pay a subscription fee.</strong> So be warned about that.</p>
-
-
-    <h3>Get a Free Cpanel and LAMP-Based Web Hosting Account</h3>
-
-    <p><a href="https://en.wikipedia.org/wiki/LAMP_(software_bundle)">LAMP</a> stands for Linux, Apache, MySQL, and <a href="http://www.tutorialspoint.com/php7/index.htm">PHP</a>. While PHP is a bit "old school" at this point (it was one of the first server-side scripting languages) it's one of the few languages supported for scripting on free web hosting accounts.</p>
-
-    <p>Here are two major web hosting providers that provide free accounts of this type:</p>
-    <ul>
-        <li><a href="http://x10hosting.com">X10 Hosting</a></li>
-        <li><a href="http://000webhost.com">000Webhost.com</a></li>
-    </ul>
-    <p>There are plenty of others that you can find by searching around. All of them provide PHP and SQL-based database servers. Files are typically uploaded using an FTP client or via your web browser. (Few have Git support.) The only major disadvantage is that the only server-side scripting language they usually support is PHP which you can <a href="http://www.tutorialspoint.com/php7/index.htm">learn here at tutorialspoint</a>.</p>
-
-    <p>You can also use these to serve static HTML pages with no PHP. So they may be a better alternative to using GitPages.</p>
+    <p>GitPages has the limitation that you can only have one domain name per user and it has to be your username. Also, <strong>everything you upload there is public to the world unless you pay a subscription fee.</strong> So be warned about that.</p>
 
 
     <h3>Learn Server-Side Scripting</h3>
@@ -298,20 +386,51 @@
     </ul>
 
 
+    <h3>Learn SQL</h3>
+
+    <p>If you haven't already, learn SQL with the <a href="https://www.khanacademy.org/computing/computer-programming/sql">Intro to SQL: Querying and managing data</a> lessons on Khan Academy.</p>
+
+    <p>After learning that, you might want to install some free SQL relational database software on your own computer. The two most popular free and open source SQL relational databases are MySQL and PostgreSQL. Both of these come with installers and excellent GUI management tools.</p>
+    <ul>
+        <li><a href="http://mysql.com">MySQL</a> - This one has a very good GUI management client with database schema design diagramming built in.</li>
+        <li><a href="http://www.postgresql.org/">PostgreSQL</a></li>
+    </ul>
+
+
+    <h3>Get a Free Cpanel and LAMP-Based Web Hosting Account</h3>
+
+    <p><a href="https://en.wikipedia.org/wiki/LAMP_(software_bundle)">LAMP</a> stands for Linux, Apache, MySQL, and <a href="http://www.tutorialspoint.com/php7/index.htm">PHP</a>. Cpanel is a site management interface that is easier to use than a command line interface.</p>
+
+    <p>While PHP is a bit "old school" at this point (it was one of the first server-side scripting languages) it's one of the few languages commonly supported for scripting on free web hosting accounts.</p>
+
+    <p>This is the point where the <a href="https://www.khanacademy.org/computing/computer-programming/sql">Intro to SQL: Querying and managing data</a> lessons on Khan Academy become useful, because now you will be able to use a database server with SQL.</p>
+
+    <p>Here are two major web hosting providers that provide free accounts of this type:</p>
+    <ul>
+        <li><a href="http://x10hosting.com">X10 Hosting</a></li>
+        <li><a href="http://000webhost.com">000Webhost.com</a></li>
+    </ul>
+    <p>There are plenty of others that you can find by searching around. All services of this type provide PHP scripting and SQL-based database servers. Files are typically uploaded using an FTP client or via your web browser. (Few have Git or ssh upload support.) The only major disadvantage is that usually the only server-side scripting language they support is PHP. You can <a href="http://www.tutorialspoint.com/php7/index.htm">learn PHP here at tutorialspoint</a>.</p>
+
+    <p>You can also use this type of free account to serve static HTML pages with no PHP or database usage. They may be a better alternative to using KISSr or GitPages, though it is more difficult to upload files to them.</p>
+
+
     <h2>Expert Difficulty Level</h2>
 
     <p><strong>This section is very advanced, so be prepared to learn a lot of stuff if you want to do any of this.</strong></p>
 
+    <p>This section is recommended for college students or possibly some high school students who are hard-core computer geeks.</p>
+
     <p>Once you get to this point, you are getting into the realm of professional web application development. You should know what server-side scripting is, what databases are, and have at least tinkered with these things.</p>
 
-    <p>Before continuing, you should learn how to use <strong>command line interfaces</strong> (CLIs), also called command shells. Which one you use will depend on which operating systems you are using. Web servers most frequently use Linux, so you will need to learn that no matter what. Fortunately for Mac users, OS X uses essentially the same command line interface as Linux with a few minor differences. Windows is a little different since PowerShell is now the preferred CLI, but you can install <span class="code">bash</span> or another Unix/Linux style shell in Windows if you want.</p>
+    <p>Before continuing, you should learn how to use <strong>command line interfaces</strong> (CLIs), also called shells. Which one you use will depend on which operating systems you are using. Web servers most frequently use Linux, so you will need to learn that no matter what. Fortunately for Mac users, OS X uses essentially the same command line interface as Linux with a few minor differences. Windows is a little different since PowerShell is now the preferred CLI, but you can install <span class="code">bash</span> or another Unix/Linux style shell in Windows if you want.</p>
 
     <p>Here are some resources that will help:</p>
     <ul>
-        <li><a href="https://www.codecademy.com/learn/learn-the-command-line">Learn to use the shell command line</a> on CodeAcademy. This tutorial is interactive and will teach you to use Unix/Linux style command line shells even if you know nothing.</li>
-        <li><a href="https://blog.udemy.com/powershell-tutorial/">A Beginner’s Introduction to Windows PowerShell</a> for those using Windows. If you are not using Windows you can skip this.</li>
-        <li>You can skip learning PowerShell by <a href="http://www.howtogeek.com/249966/how-to-install-and-use-the-linux-bash-shell-on-windows-10/">installing Linux bash on Windows</a> after which you will have the same sort of command line interface
-            in Windows that you do elsewhere.</li>
+        <li><a href="https://www.codecademy.com/learn/learn-the-command-line">Learn to use the shell command line</a> on CodeAcademy. This tutorial is interactive and will teach you to use Unix/Linux style command line shells, such as 'bash', even if you know nothing.</li>
+        <li>If you installed <a href="https://git-for-windows.github.io/">Git for Windows</a>, you already have a Linux-like shell called "Git Bash" that you can launch from the start menu. Just type "git bash" into the search box of the start menu. You don't have to be using Git to use the 'bash' shell. You can do anything with it, and it comes already configured for running git commands too. It recognizes the same sort of commands as 'bash' on Linux, but it doesn't allow you to run Linux software.</li>
+        <li><a href="https://blog.udemy.com/powershell-tutorial/">A Beginner’s Introduction to Windows PowerShell</a> for those using Windows.</li>
+        <li>If you have Windows 10 and have installed the Anniversary Update, you can actualy <a href="http://www.howtogeek.com/249966/how-to-install-and-use-the-linux-bash-shell-on-windows-10/">install Microsoft's Linux command line environment on Windows</a>. This will not only give you a Linux shell, but you can also run actual Linux command line software. It is basically a Linux emulator, but it doesn't use a virtual machine and doesn't come with support for graphical applications by default.</li>
     </ul>
 
 
@@ -321,10 +440,10 @@
 
     <p>It is also possible to install Apache, PHP, python, ruby, and other languages with web application frameworks on your local computer for purposes of learning and testing.</p>
 
-    <p>You can also install a database such as MySQL or PostgreSQL on your local computer. Both of these come with GUI management tools.</p>
+    <p>If you haven't already then you probably want to install a database such as MySQL or PostgreSQL on your local computer.</p>
     <ul>
-        <li><a href="http://mysql.com">MySQL</a></li>
-        <li><a href="http://www.postgresql.org/">PostgreSQL</a></li>
+        <li><a href="http://mysql.com">MySQL</a> has a very good GUI management client with databae schema design diagramming built in. This is very useful for learning.</li>
+        <li><a href="http://www.postgresql.org/">PostgreSQL</a> is another very common full-featured relational database server. The GUI client isn't quite as fancy but it is still very good.</li>
     </ul>
 
 
@@ -362,9 +481,9 @@
 
     <h2>Conclusion</h2>
 
-    <p>If you've made it this far and managed to at lest tinker with everything mentioned here then congratulations! But you're still not a professional web developer just yet. There's stil quite a bit to learn about things like user interaction, usability, software engineering practices, and application design. But hopefully all of this has at least gotten you started toward crating the next killer web app.</p>
+    <p>If you've made it this far and managed to at least tinker with everything mentioned here then congratulations! But you're still not a professional web developer just yet. There's stil quite a bit to learn about things like user interaction, usability, software engineering practices, and application design. But hopefully all of this has at least gotten you started toward creating the next killer web app.</p>
 
-    <p class="credits">Created by <a href="https://www.khanacademy.org/profile/KnowMoreStuff/">KnowMoreStuff</a> on KA.</p>
+    <p class="credits">Author: Created by <a href="https://www.khanacademy.org/profile/KnowMoreStuff/">KnowMoreStuff</a>, the real life version of Oh Noes! the error buddy.</p>
 
     <!-- Run all the JavaScript stuff -->
     <!-- Include the processing.js library -->
@@ -373,7 +492,7 @@
     <script>
         var sketchProc = function(processingInstance) {
             with(processingInstance) {
-                size(400, 400);
+                size(600, 600);
                 frameRate(30);
 
                 // ProgramCodeGoesHere
