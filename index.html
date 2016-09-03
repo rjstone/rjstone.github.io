@@ -146,7 +146,7 @@
 
 <body>
     <div class="navbar navbar-fixed-top navbar-dark bg-success">
-        <a href="#" class="navbar-brand">Home</a>
+        <a href="#" class="navbar-brand">&#x1f3e0;</a>
         <ul class="nav navbar-nav">
             <li class="nav-item active">
                 <a class="nav-link" href="#setup">Site Setup</a>
@@ -168,21 +168,23 @@
     <div class="jumbotron jumbotron-fluid pageheader">
         <div class="container">
             <h1 class="display-3">Make your own web site.</h1>
-            <p class="lead">Instructions to help Khan Academy students create a working public web site using what they've learned about HTML, CSS, and possibly JavaScript.</p>
+            <p class="lead">Instructions to help Khan Academy students create a working public web site using what they've learned about HTML, CSS, and JavaScript.</p>
             <p>Just keep reading to get started!</p>
         </div>
     </div>
 
     <div class="container">
+
         <h2>Introduction</h2>
 
-        <p>This page was created primarily for people who have learned HTML/CSS and possibly JavaScript+Processing.js on <a href="https://www.khanacademy.org/">Khan Academy</a>. Users there are constantly asking "how do I create a real web site?" Khan Academy only provides a sandbox for educational purposes, not web site hosting services. This guide will explain how to use other services to create a web site that anyone on the Internet can browse.</p>
+        <p>This page was created primarily for people who have learned HTML/CSS and possibly JavaScript+Processing.js on <a href="https://www.khanacademy.org/">Khan Academy</a>. Users there are constantly asking "how do I create my own web site?" Khan Academy provides a great "sandbox" for educational purposes, but it is not a web hosting provider.</p>
 
-        <p>This page was set up using the exact instructions described here.</p>
+        <p>This guide will explain how to use other services to create a web site that anyone on the Internet can browse. In fact, this page was set up using the exact instructions described here.</p>
+
 
         <h2>What Should I Have Learned Before Proceeding?</h2>
 
-        <p>You should have completed at least the <a href="https://www.khanacademy.org/computing/computer-programming/html-css">Intro to HTML/CSS: Making webpages</a> lessons on Khan Academy. This is the absolute minimum level of knowledge required.</p>
+        <p>You should have completed at least the <a href="https://www.khanacademy.org/computing/computer-programming/html-css">Intro to HTML/CSS: Making webpages</a> lessons on Khan Academy, or completed similar lessons elsewhere. This is the absolute minimum level of knowledge required.</p>
 
         <p>These <strong>optional</strong> lessons will also be useful to you, but it is not necessary to complete them before continuing here:</p>
         <ul>
@@ -191,19 +193,20 @@
             <li><a href="https://www.khanacademy.org/computing/computer-programming/html-js-jquery">HTML/JS: Making webpages interactive with jQuery</a></li>
         </ul>
 
+
         <h2>How does this work? How much does it cost?</h2>
 
-        <p>These instructions will describe how to set up a very simple static web site using the cloud file storage service <a href="https://db.tt/JBhh3niM">Dropbox.com</a> and the web hosting service <a href="https://www.kissr.com/">KISSr</a>. Both are free for a basic level of service.</p>
+        <p>These instructions will describe how to set up a very simple web site using the cloud file storage service <a href="https://db.tt/JBhh3niM">Dropbox.com</a> and the web hosting service <a href="https://www.kissr.com/">KISSr</a>. Both are free for a basic level of service.</p>
 
-        <p>While the name "KISSr" sounds very strange for a web hosting service, the name would appear to be based on the acronym KISS which stands for "Keep It Simple, Stupid." The service does live up to its name in that it makes it very simple to host a web site, at least for anyone who knows some HTML and CSS.</p>
+        <p>While the name "KISSr" sounds very strange for a web hosting service, the name would appear to be based on the acronym KISS which stands for "Keep It Simple, Stupid." The service does live up to its name in that it makes it very simple to host a web site, at least for anyone who knows a little bit of HTML and CSS.</p>
 
         <p>Dropbox will give you 2GB of cloud storage for free, and KISSr will let you set up one site that provides 1,000 web requests per month for free. This is plenty to get started with.</p>
 
-        <div class="alert alert-info" role="alert"><strong>Disclaimer:</strong> A number of products and services are mentioned in this guide, though almost all of them are free or very low cost. The author does not endorse, nor is he affiliated with, any of the products or services. Please do your own research and verification before providing things like personal information or spending any money. The author does not work for Khan Academy and this is not an official Khan Academy site.</div>
+        <div class="alert alert-info" role="alert"><strong>Disclaimer:</strong> A number of products and services are mentioned in this guide, though almost all of them are free. The author does not endorse, nor is he affiliated with, any of these products or services. Please do your own research and verification before providing things like personal information or spending any money. The author does not work for Khan Academy and this is not an official Khan Academy site.</div>
 
 
         <h2 class="anchor" id="setup">Site Setup for HTML/CSS/JS</h2>
-        <p>Below are the instructions for setting up your static web site. A static web site is the simplest type of web site. There are no scripts or SQL databases running on the server. This means that <strong>SQL is not supported</strong> on this type of site.</p>
+        <p>Below are the instructions for setting up your static web site. A static web site is the simplest type of web site. There are no scripts or SQL databases running on the server, but it is sufficient for <a href="https://en.wikipedia.org/wiki/Front-end_web_development">front-end web development</a>. This means that <strong>SQL is not supported</strong> on this type of site.</p>
 
         <p>Anything you have learned about HTML, CSS, and JavaScript will work in this environment. You can write JavaScript that will work in the browser of anyone visiting your site.</p>
 
@@ -253,8 +256,7 @@
 
         <p>KISSr automatically creates an <code>index.html</code> file for you as a template, but you can delete the entire contents of the file and start over if you want. There is nothing special about the code in the file, and no reason to keep any of it if you do not want it.</p>
 
-        <p>Changes you make to the file, or any other files, will not be available on your web site until:
-        </p>
+        <p>Changes you make to the file, or any other files, will not be available on your web site until:</p>
         <ol>
             <li>You save the file, and</li>
             <li>Dropbox Sync has a few seconds to upload the file.</li>
@@ -350,7 +352,7 @@
             <canvas id="mycanvas"></canvas><br>This is <a href="https://www.khanacademy.org/computer-programming/spin-off-of-project-paint-splatter/5316498611372032">Paint Splatter</a> from Khan Academy.
         </div>
 
-        <p>You can CSS style the <strong>&lt;canvas&gt;</strong> element to control things like the placement and margin of the canvas. If you want a different canvas size or frame rate, change the numbers in this part of the code:</p>
+        <p>You can CSS style the <code>&lt;canvas&gt;</code> element to control things like the placement and margin of the canvas. If you want a different canvas size or frame rate, change the numbers in this part of the code:</p>
 <pre class="code">
         ...
         with (processingInstance) {
@@ -387,15 +389,26 @@
             <li><a href="https://www.khanacademy.org/computing/computer-programming/programming">Intro to JS: Drawing &amp; Animation</a></li>
             <li><a href="https://www.khanacademy.org/computing/computer-programming/html-css-js">HTML/JS: Making webpages interactive</a></li>
             <li><a href="https://www.khanacademy.org/computing/computer-programming/html-js-jquery">HTML/JS: Making webpages interactive with jQuery</a></li>
-            <li><a href="https://www.khanacademy.org/computing/computer-science/internet-intro">Internet 101</a> - How the Internet works</li>
         </ul>
+
+        <h3>Learn About the Internet</h3>
+
+        <p>At some point you'll probably want to know more about how the Internet works. Consider watching the <a href="https://www.khanacademy.org/computing/computer-science/internet-intro">Internet 101</a> lessons on Khan Academy. This is useful because it will help you understand some of the more advanced concepts in web and network application development.</p>
+
+        <h3>Learn Bootstrap</h3>
+
+        <p><a href="http://getbootstrap.com/">Bootstrap</a> is a HTML, CSS, and JavaScript <a href="https://en.wikipedia.org/wiki/Front-end_web_development">front-end</a> <a href="https://en.wikipedia.org/wiki/CSS_frameworks">framework</a> that improves layout across devices with different screen sizes and provides a large number of HTML/CSS components for you to use. This may sound complicated, but it makes it easy to create some very professional looking web pages. In fact, this page was created using Bootstrap 4.</p>
+
+        <p>One of the biggest advantages of using Bootstrap is <a href="https://en.wikipedia.org/wiki/Responsive_web_design">responsive design</a> which means that anything created with it almost automatically looks good on everything from a mobile phone screen to a desktop web browser.</p>
+
+        <p>Bootstrap tutorials are available at <a href="http://www.w3schools.com/bootstrap/default.asp">w3schools.com</a> and <a href="http://www.tutorialspoint.com/bootstrap/">tutorialspoint</a>.</p>
+
 
         <h2 class="anchor" id="intermediate">Intermediate Difficulty</h2>
 
         <p>This is where things start to get more difficult, but you don't need to be a professional web developer yet.</p>
 
         <p>Things at this level are recommended for people who are at least in high school.</p>
-
 
         <h3>Get Familiar With the Full HTML/CSS Reference</h3>
 
@@ -415,26 +428,27 @@
 
         <p>GitPages has the limitation that you can only have one domain name per user and it has to be your username. Also, <strong>everything you upload there is public to the world unless you pay a subscription fee.</strong> So be warned about that.</p>
 
-
         <h3>Learn Server-Side Scripting</h3>
 
         <p>Learn server-side scripting with <a href="https://nodejs.org/">Node.js</a>, <a href="http://www.tutorialspoint.com/php7/index.htm">PHP</a>, or another server-side scripting language. Why? Because for many purposes you need to be able to write server-side code. This is especially true if you need to store information in a database.</p>
 
-        <p>You can learn Node.js and Express.js at <a href="http://www.tutorialspoint.com/nodejs/index.htm">tutorialspoint</a>.</p>
+        <p>You can learn Node.js at <a href="http://www.tutorialspoint.com/nodejs/index.htm">tutorialspoint</a>.</p>
 
         <p>There are other server-side scripting environments you can use that are based on python, ruby, and other languages. Tutorialspoint has tutorials for all of them.</p>
 
+        <h3>Learn AngularJS</h3>
+
+        <p><a href="https://angularjs.org/">AngularJS</a> is a front-end web application framework. It saves you from having to write as much front-end JavaScript when creating web applications. Tutorials are available at <a href="https://www.codecademy.com/learn/learn-angularjs">CodeAcademy</a>, <a href="http://www.w3schools.com/angular/default.asp">w3schools</a>, and <a href="http://www.tutorialspoint.com/angularjs/">tutorialspoint</a>.</p>
 
         <h3>Other Code Practice Sandboxes and Playgrounds</h3>
 
-        <p>Here are some sites where you can play around with JavaScript and even experiment with server-side scripting:</p>
+        <p>Here are some sites where you can play around with JavaScript, Bootstrap, AngularJS and even experiment with server-side scripting using Node.js and Express.js:</p>
         <ul>
-            <li><strong><a href="https://hyperdev.com/">HyperDev</a> supports <a href="https://nodejs.org/">Node.JS</a> and <a href="http://expressjs.com/">Express.js</a> for server side scripting! (Recommended)</strong></li>
+            <li><a href="https://hyperdev.com/">HyperDev</a> supports <a href="https://nodejs.org/">Node.JS</a> and <a href="http://expressjs.com/">Express.js</a> for server side scripting! (Recommended)</li>
             <li><a href="http://codepen.io/pen/">Codepen</a> is client-side only but supports Angular.JS, jQuery, and other JS libraries.</li>
             <li><a href="http://jsbin.com">JSBin</a> is similar to Codepen in capability.</li>
-            <li><a href="https://jsfiddle.net/">JSFiddle</a> is similar to the previous two but has Processing.js as a library option.</li>
+            <li><a href="https://jsfiddle.net/">JSFiddle</a> is similar to the previous two but has Processing.js as a library option. You can still use Processing.js with the others, there's just no shortcut for adding the script link for it.</li>
         </ul>
-
 
         <h3>Learn SQL</h3>
 
@@ -445,7 +459,6 @@
             <li><a href="http://mysql.com">MySQL</a> - This one has a very good GUI management client with database schema design diagramming built in.</li>
             <li><a href="http://www.postgresql.org/">PostgreSQL</a></li>
         </ul>
-
 
         <h3>Get a Free Cpanel and LAMP-Based Web Hosting Account</h3>
 
