@@ -160,8 +160,32 @@
                     <a class="dropdown-item" href="#beginners">Novice</a>
                     <a class="dropdown-item" href="#intermediate">Intermediate</a>
                     <a class="dropdown-item" href="#advanced">Advanced</a>
+                    <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="#dm-frameworks">Desktop/Mobile Apps</a>
                 </div>
+            </li>
+
+            <li class="nav-item active pull-xs-right">
+                <a class="nav-link" href="https://www.khanacademy.org/profile/KnowMoreStuff/">@KnowMoreStuff</a>
+            </li>
+
+            <li class="nav-item active pull-xs-right">
+                <a class="nav-link" href="http://www.khanacademy.org">Khan Academy</a>
+            </li>
+
+            <li class="nav-item dropdown active pull-xs-right">
+                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Tools</a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="https://thimble.mozilla.org/">Mozilla Thimble</a>
+                    <a class="dropdown-item" href="https://c9.io/">Cloud9</a>
+                    <a class="dropdown-item" href="https://hyperdev.com/">HyperDev</a>
+                    <a class="dropdown-item" href="http://codepen.io/">CodePen</a>
+                    <a class="dropdown-item" href="http://jsbin.com/">JSBin</a>
+                    <a class="dropdown-item" href="https://jsfiddle.net/">JSFiddle</a>
+                </div>
+            </li>
+            <li class="nav-item active pull-xs-right">
+                <div class="nav-link" style="color: #8f8;">External Links:</div>
             </li>
         </ul>
     </div>
@@ -193,6 +217,10 @@
             <li><a href="https://www.khanacademy.org/computing/computer-programming/html-css-js">HTML/JS: Making webpages interactive</a></li>
             <li><a href="https://www.khanacademy.org/computing/computer-programming/html-js-jquery">HTML/JS: Making webpages interactive with jQuery</a></li>
         </ul>
+
+        <p>If you still just want to experiment and you want a less restrictive environment to do so, there's an excellent free service called <a href="https://thimble.mozilla.org/">Mozilla Thimble</a> that you can try. This provides you with an online editor, but your projects can consist of multiple files (including images) and you are less restricted in what you can do. It also provides you with a URL for each of your projects that allows them to be viewed as full-size web sites. The main problem with it is that <em>all projects are public on Thimble</em> and anyone can "remix" (spin off) your project. You also can't get your own domain name. While it's much nicer than the HTML editor on Khan Academy, it isn't a substitute for a "real" web site.</p>
+
+        <p>So if you've at least finished the <a href="https://www.khanacademy.org/computing/computer-programming/html-css">Intro to HTML/CSS</a> class on Khan Academy, keep reading.</p>
 
 
         <h2>How does this work? How much does it cost?</h2>
@@ -291,9 +319,11 @@
 
         <p>This is completely optional and it's the only thing here that costs money, but some domains are extremely cheap (less than US$1/year).</p>
 
-        <p>If you don't like the domain name <code>kissr.com</code> (most people wouldn't blame you) you can register your own domain name. <a href="https://www.namecheap.com/domains.aspx">NameCheap</a> lives up to its name and will register some domains for less than US$1 per year. There is no reason why you have to use them though because there are hundreds of companies that handle domain registration. See the botton of <a href="https://www.kissr.com/pages/documentation">this page</a> for a list, or just do a web search for "domain registration".</p>
+        <p>If you don't like the domain name <code>kissr.com</code> (most people wouldn't blame you) you can register your own domain name. <a href="https://www.namecheap.com/domains.aspx">NameCheap</a> will register some domains for less than US$1 per year, but the catch with them is that the price goes way up after a year. Fortunately domains can be transferred to a different registrar.</p>
 
-        <p>Once you have registered a domain name, you will need to point a DNS record to the web server. Instructions on how to do that are <a href="https://www.kissr.com/pages/documentation">available here</a>.</p>
+        <p>The best thing to do is check out <a href="http://www.registrarowl.com/report_registrar_price_comparison.php">Registrar Owl</a> for a massive price comparison list. Don't forget to take <a href="http://www.registrarowl.com/report_registrar_free_whois_privacy.php">Whois Privacy</a> into account because many registrars charge money to keep your name and address out of the whois database. (Thanks to <a href="http://ejohn.org/blog/low-cost-com-domains-with-whois-privacy/">John Resig</a> for pointing this out on his blog.)</p>
+
+        <p>Once you have registered a domain name, you will need to point a DNS record to the web server. Instructions on how to do that are <a href="https://www.kissr.com/pages/documentation">available here</a>. You can also use a URL redirect if necessary.</p>
 
         <p>Domain names are useful not just because you can pick your own name, but also because they allow you to move your site to a different server without changing the URL. So if you later decide to move your site to a web server with more features, all you will need to do is update the DNS record for the domain to point to the new server. Nobody will even notice that you moved your site to a different service because the URL for your site will stay the same.</p>
 
@@ -366,7 +396,7 @@
 
         <h3>Differences Between Khan Academy's Processing.js and the Standard Version</h3>
 
-        <p>There are some differences between the Processing.js library used by Khan Academy and the stanard one that you will be using on your own web pages.</p>
+        <p>There are some differences between the Processing.js library used by Khan Academy and the standard one that you will be using on your own web pages.</p>
 
         <p><strong>The good news:</strong> You can now use some Processing.js functions and JavaScript features that don't work on Khan Academy! See the following documentation for all the cool stuff you can do now:</p>
         <ul>
