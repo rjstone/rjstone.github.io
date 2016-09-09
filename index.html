@@ -164,24 +164,49 @@
                     <a class="dropdown-item" href="#dm-frameworks">Desktop/Mobile Apps</a>
                 </div>
             </li>
-
+            <li class="nav-item active">
+                <a class="nav-link" href="https://trello.com/b/3Xw6UOuj">Feedback</a>
+            </li>
+<!--
             <li class="nav-item active pull-xs-right">
                 <a class="nav-link" href="https://www.khanacademy.org/profile/KnowMoreStuff/">@KnowMoreStuff</a>
             </li>
-
-            <li class="nav-item active pull-xs-right">
-                <a class="nav-link" href="http://www.khanacademy.org">Khan Academy</a>
+-->
+            <li class="nav-item dropdown active pull-xs-right">
+                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Learning</a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="http://www.khanacademy.org">Khan Academy</a>
+                    <a href="https://www.freecodecamp.com/" class="dropdown-item">FreeCodeCamp</a>
+                    <a href="http://www.sololearn.com/" class="dropdown-item">SoloLearn</a>
+                    <a href="http://www.tutorialspoint.com/" class="dropdown-item">tutorialspoint</a>
+                    <a href="https://www.codecademy.com/" class="dropdown-item">CodeAcademy</a>
+                    <a href="http://programmr.com/" class="dropdown-item">Programmr</a>
+                </div>
             </li>
 
             <li class="nav-item dropdown active pull-xs-right">
                 <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Tools</a>
                 <div class="dropdown-menu">
+                    <h6 class="dropdown-header">Code Sandboxes</h6>
                     <a class="dropdown-item" href="https://thimble.mozilla.org/">Mozilla Thimble</a>
                     <a class="dropdown-item" href="https://c9.io/">Cloud9</a>
                     <a class="dropdown-item" href="https://hyperdev.com/">HyperDev</a>
                     <a class="dropdown-item" href="http://codepen.io/">CodePen</a>
                     <a class="dropdown-item" href="http://jsbin.com/">JSBin</a>
                     <a class="dropdown-item" href="https://jsfiddle.net/">JSFiddle</a>
+                    <a class="dropdown-item" href="http://sqlfiddle.com/">SQLFiddle</a>
+                    <div class="dropdown-divider"></div>
+                    <h6 class="dropdown-header">Regex Testers</h6>
+                    <a class="dropdown-item" href="http://regexr.com/">RegExr</a>
+                    <div class="dropdown-divider"></div>
+                    <h6 class="dropdown-header">Color Schemers</h6>
+                    <a class="dropdown-item" href="http://paletton.com/">Paletton</a>
+                    <a href="http://www.shutterstock.com/labs/spectrum/" class="dropdown-item">Spectrum</a>
+                    <div class="dropdown-divider"></div>
+                    <h6 class="dropdown-header">Doc Browsers</h6>
+                    <a class="dropdown-item" href="http://devdocs.io/">devdocs.io</a>
+                    <a class="dropdown-item" href="https://zealdocs.org/">Zeal</a>
+                    <a class="dropdown-item" href="https://kapeli.com/dash">Dash</a>
                 </div>
             </li>
             <li class="nav-item active pull-xs-right">
@@ -218,7 +243,7 @@
             <li><a href="https://www.khanacademy.org/computing/computer-programming/html-js-jquery">HTML/JS: Making webpages interactive with jQuery</a></li>
         </ul>
 
-        <p>If you still just want to experiment and you want a less restrictive environment to do so, there's an excellent free service called <a href="https://thimble.mozilla.org/">Mozilla Thimble</a> that you can try. This provides you with an online editor, but your projects can consist of multiple files (including images) and you are less restricted in what you can do. It also provides you with a URL for each of your projects that allows them to be viewed as full-size web sites. The main problem with it is that <em>all projects are public on Thimble</em> and anyone can "remix" (spin off) your project. You also can't get your own domain name. While it's much nicer than the HTML editor on Khan Academy, it isn't a substitute for a "real" web site.</p>
+        <p>If you still just want to experiment and you want a less restrictive environment to do so, there's an excellent free service called <a href="https://thimble.mozilla.org/">Mozilla Thimble</a> that you can try. This provides you with an online editor, but your projects can consist of multiple files (including images) and you are less restricted in what you can do. It also provides you with a URL for each of your projects that allows them to be viewed as full-size web sites. The main problem with it is that <em>all projects are public on Thimble</em> and anyone can "remix" (spin off) your project. You also can't use your own domain name with it. While it's more powerful than the HTML editor on Khan Academy, it isn't a substitute for a regular web site.</p>
 
         <p>So if you've at least finished the <a href="https://www.khanacademy.org/computing/computer-programming/html-css">Intro to HTML/CSS</a> class on Khan Academy, keep reading.</p>
 
@@ -231,7 +256,7 @@
 
         <p>Dropbox will give you 2GB of cloud storage for free, and KISSr will let you set up one site that provides 1,000 web requests per month for free. This is plenty to get started with.</p>
 
-        <div class="alert alert-info" role="alert"><strong>Disclaimer:</strong> A number of products and services are mentioned in this guide, though almost all of them are free. The author does not endorse, nor is he affiliated with, any of these products or services. Please do your own research and verification before providing things like personal information or spending any money. The author does not work for Khan Academy and this is not an official Khan Academy site.</div>
+        <div class="alert alert-info" role="alert"><strong>Disclaimer:</strong> A number of products and services are mentioned in this guide, though almost all of them are free. The author does not endorse, nor is he affiliated with, any of these products or services. Please do your own research and verification before providing things like personal information or spending any money. The author does not get paid by Khan Academy and this is not an official Khan Academy site.</div>
 
 
         <h2 class="anchor" id="setup">Site Setup for HTML/CSS/JS</h2>
@@ -424,9 +449,63 @@
             <li><a href="https://www.khanacademy.org/computing/computer-programming/html-js-jquery">HTML/JS: Making webpages interactive with jQuery</a></li>
         </ul>
 
+        <h3>Get Familiar With the Full HTML/CSS Documentation</h3>
+
+        <p>Read over, or at least poke around in, the reference documentation to see just how many things you can do with HTML and CSS:</p>
+        <ul>
+            <li>Full <a href="http://www.w3schools.com/tags/default.asp">HTML5 Element Reference</a></li>
+            <li>Full <a href="http://www.w3schools.com/cssref/default.asp">CSS3 Reference</a></li>
+            <li><a href="http://devdocs.io/">devdocs.io</a> documentation browser (covers many differet languages, libraries, and packages)</li>
+            <li><a href="https://zealdocs.org/">Zeal</a> (Windows, Linux, BSD) or <a href="https://kapeli.com/dash">Dash</a> (OS X) - Offline documentation readers</li>
+        </ul>
+
         <h3>Learn About the Internet</h3>
 
-        <p>At some point you'll probably want to know more about how the Internet works. Consider watching the <a href="https://www.khanacademy.org/computing/computer-science/internet-intro">Internet 101</a> lessons on Khan Academy. This is useful because it will help you understand some of the more advanced concepts in web and network application development.</p>
+        <p>At some point you'll probably want to know more about how the Internet works. Consider watching the <a href="https://www.khanacademy.org/computing/computer-science/internet-intro">Internet 101</a> lessons on Khan Academy. This is useful because it will help you understand some of the more advanced things described below, and some things mentioned above such as domain names.</p>
+
+
+        <h3>Consider Using GitPages</h3>
+
+        <p>KISSr limits your usage to 1,000 page views per month with the free account. While you can pay them $5/month to remove this restriction and gain the ability to create as many subdomains as you want, you might want to try using <a href="https://pages.github.com/">GitPages</a> which doesn't have the usage limitations.</p>
+
+        <p>GitPages is slightly harder to use because you will need to learn to use <a href="https://github.com/">Git</a> to upload your files.</p>
+
+        <p>While you can just upload files to a Git project using your web browser, learning Git is worthwhile because this knowledge will come in very handy for the more advanced server hosting environments described below. At first, at least learn to use the GUI Git client provided by GitHub.</p>
+
+        <p>GitPages has the limitation that you can only have one domain name per user and it has to be your username. Also, <strong>everything you upload there is public to the world unless you pay a subscription fee.</strong> So be warned about that. You can use your own domain name with GitPages.</p>
+
+
+        <h2 class="anchor" id="intermediate">Intermediate Difficulty</h2>
+
+        <p>This is where things start to get more difficult, but you don't need to be a professional web developer yet.</p>
+
+        <p>Things at this level are recommended for people who are at least in high school.</p>
+
+        <p>From this point on, everything will be divided into one of two categories: <strong>front end</strong> and <strong>back end</strong>. Here's what these terms mean:</p>
+        <ul>
+            <li><strong>Front End</strong> also called "client side" means that you are programming the user's browser. This includes HTML, CSS, DOM, and client-side (browser side) JavaScript. It also includes things like jQuery, Bootstrap, Processing.js, and any other library that works in the browser. So far everything you've done has been front end.</li>
+            <li><strong>Back End</strong> also called "server side" refers to programming the web server. This includes one or more of Node.js (server side JavaScript), PHP, python, ruby, databases (SQL or NoSQL), file server storage, and any frameworks like Express.js, Django, or Rails that have to run on the server. You may not have done any of this yet, but if you leared some SQL then you were learning about back end development.</li>
+        </ul>
+        <p>Any time you hear about something new, like Express.js, you should ask yourself "is this front end or back end stuff?" If something falls into the back end category then you need a server that will support it. Express.js is a back end framework.</p>
+
+        <p>Not all servers support everything. KISSr, for example, doesn't support any back end development at all. All it will do is send your files to the browser and any code will have to run in the browser. Other web hosting services may only support PHP and the MySQL database. Yet others might support almost anything if you know what you're doing.</p>
+
+
+        <h3>More Advanced Web Tutorial Communities</h3>
+
+        <p>Before moving on, check out both of the following:</p>
+        <ul>
+            <li><a href="https://www.freecodecamp.com/">FreeCodeCamp</a> - You could almost just go to this site and forget about the rest of this page. They have almost everything you need to get a job including:
+                <ul>
+                    <li><strong>Front End Development Certification:</strong> HTML5, CSS, JavaScript, Bootstrap, jQuery, Object Oriented and Functional Programming, JSON/Ajax, Algorithms</li>
+                    <li><strong>Data Visualization Certification:</strong> Sass, React, D3</li>
+                    <li><strong>Back End Development Certification:</strong> Testing/Debugging, Git, Node.js/Express.js, MongoDB</li>
+                    <li><strong>Full Stack Development Certification:</strong> Requires using what you learned above to complete real working projects for non-profit groups.</li>
+                    <li><strong>Challenges: </strong> Various other subjects, not all of which are available yet.</li>
+                </ul></li>
+            <li><a href="http://www.sololearn.com/">SoloLearn</a> - Here you can learn several languages including: HTML, CSS, SQL, JavaScript, PHP, Python, Java, C#, and C++. You might be thinking "I already know HTML, CSS, and JavaScript" but it might be worth taking their lessons anyway because they will be easy for you at this point, will provide a refresher, and you will probably learn some new things about them too. At least take a look so you know where some good lessons are should you decide to learn PHP or some other language later.</li>
+        </ul>
+
 
         <h3>Learn Bootstrap</h3>
 
@@ -437,61 +516,44 @@
         <p>Bootstrap tutorials are available at <a href="http://www.w3schools.com/bootstrap/default.asp">w3schools.com</a> and <a href="http://www.tutorialspoint.com/bootstrap/">tutorialspoint</a>.</p>
 
 
-        <h2 class="anchor" id="intermediate">Intermediate Difficulty</h2>
-
-        <p>This is where things start to get more difficult, but you don't need to be a professional web developer yet.</p>
-
-        <p>Things at this level are recommended for people who are at least in high school.</p>
-
-        <h3>Get Familiar With the Full HTML/CSS Reference</h3>
-
-        <p>You haven't learned everything yet. Read over, or at least poke around in, the reference documentation to see just how many things you can do with HTML and CSS:</p>
-        <ul>
-            <li>Full <a href="http://www.w3schools.com/tags/default.asp">HTML5 Element Reference</a></li>
-            <li>Full <a href="http://www.w3schools.com/cssref/default.asp">CSS3 Reference</a></li>
-        </ul>
-
-        <h3>Consider Using GitPages</h3>
-
-        <p>KISSr limits your usage to 1,000 page views per month with the free account. While you can pay them $5/month to remove this restriction and gain the ability to create as many subdomains as you want, you might want to try using <a href="https://pages.github.com/">GitPages</a> which doesn't have usage limitations.</p>
-
-        <p>GitPages is slightly harder to use because you will need to learn to use <a href="https://github.com/">Git</a> to upload your files.</p>
-
-        <p>While you can just upload files to a Git project using your web browser, learning Git is worthwhile because this knowledge will come in very handy for the more advanced server hosting environments described below. At first, at least learn to use the GUI Git client provided by GitHub.</p>
-
-        <p>GitPages has the limitation that you can only have one domain name per user and it has to be your username. Also, <strong>everything you upload there is public to the world unless you pay a subscription fee.</strong> So be warned about that.</p>
-
         <h3>Learn Server-Side Scripting</h3>
 
         <p>Learn server-side scripting with <a href="https://nodejs.org/">Node.js</a>, <a href="http://www.tutorialspoint.com/php7/index.htm">PHP</a>, or another server-side scripting language. Why? Because for many purposes you need to be able to write server-side code. This is especially true if you need to store information in a database.</p>
 
         <p>You can learn Node.js at <a href="http://www.tutorialspoint.com/nodejs/index.htm">tutorialspoint</a>.</p>
 
-        <p>There are other server-side scripting environments you can use that are based on python, ruby, and other languages. Tutorialspoint has tutorials for all of them.</p>
+        <p>There are other server-side scripting environments you can use that are based on python, ruby, and other languages.</p>
+
 
         <h3>Learn AngularJS</h3>
 
         <p><a href="https://angularjs.org/">AngularJS</a> is a front-end web application framework. It saves you from having to write as much front-end JavaScript when creating web applications. Tutorials are available at <a href="https://www.codecademy.com/learn/learn-angularjs">CodeAcademy</a>, <a href="http://www.w3schools.com/angular/default.asp">w3schools</a>, and <a href="http://www.tutorialspoint.com/angularjs/">tutorialspoint</a>.</p>
 
-        <h3>Other Code Practice Sandboxes and Playgrounds</h3>
+
+        <h3>Other Code Testing Sandboxes and Playgrounds</h3>
 
         <p>Here are some sites where you can play around with JavaScript, Bootstrap, AngularJS and even experiment with server-side scripting using Node.js and Express.js:</p>
         <ul>
+            <li><a href="http://c9.io">Cloud9</a> is the king of all of them. You can get a free account with a full in-browser IDE that allows you to create workspaces (containers) where you can do almost anything and use almost any language, even C++. This is a great place to practice if you want to learn something other than Node.js, PHP, or SQL.</li>
             <li><a href="https://hyperdev.com/">HyperDev</a> supports <a href="https://nodejs.org/">Node.JS</a> and <a href="http://expressjs.com/">Express.js</a> for server side scripting! (Recommended)</li>
             <li><a href="http://codepen.io/pen/">Codepen</a> is client-side only but supports Angular.JS, jQuery, and other JS libraries.</li>
             <li><a href="http://jsbin.com">JSBin</a> is similar to Codepen in capability.</li>
             <li><a href="https://jsfiddle.net/">JSFiddle</a> is similar to the previous two but has Processing.js as a library option. You can still use Processing.js with the others, there's just no shortcut for adding the script link for it.</li>
+            <li><a href="http://sqlfiddle.com/">SQLFiddle</a> for runnig SQL and sharing SQL that you need help with.</li>
         </ul>
+
 
         <h3>Learn SQL</h3>
 
-        <p>If you haven't already, learn SQL with the <a href="https://www.khanacademy.org/computing/computer-programming/sql">Intro to SQL: Querying and managing data</a> lessons on Khan Academy.</p>
+        <p>If you haven't already, learn SQL with the <a href="https://www.khanacademy.org/computing/computer-programming/sql">Intro to SQL: Querying and managing data</a> lessons on Khan Academy or something similar.</p>
 
-        <p>After learning that, you might want to install some free SQL relational database software on your own computer. The two most popular free and open source SQL relational databases are MySQL and PostgreSQL. Both of these come with installers and excellent GUI management tools.</p>
+        <p>After learning SQL, you might want to install some free SQL relational database software on your own computer. The two most popular free and open source SQL relational databases are MySQL and PostgreSQL. Both of these come with installers and excellent GUI management tools.</p>
         <ul>
             <li><a href="http://mysql.com">MySQL</a> - This one has a very good GUI management client with database schema design diagramming built in.</li>
             <li><a href="http://www.postgresql.org/">PostgreSQL</a></li>
         </ul>
+        <p><a href="http://sqlfiddle.com/">SQLFiddle</a> can be used for sharing code you're having trouble with or testing things out without having to install database software.</p>
+
 
         <h3>Get a Free Cpanel and LAMP-Based Web Hosting Account</h3>
 
@@ -499,7 +561,7 @@
 
         <p>While PHP is a bit "old school" at this point (it was one of the first server-side scripting languages) it's one of the few languages commonly supported for scripting on free web hosting accounts.</p>
 
-        <p>This is the point where the <a href="https://www.khanacademy.org/computing/computer-programming/sql">Intro to SQL: Querying and managing data</a> lessons on Khan Academy become useful, because now you will be able to use a database server with SQL.</p>
+        <p>This is the point where the <a href="https://www.khanacademy.org/computing/computer-programming/sql">Intro to SQL: Querying and managing data</a> lessons on Khan Academy become useful, because now you will be able to write back end code that uses a database server with SQL.</p>
 
         <p>Here are two major web hosting providers that provide free accounts of this type:</p>
         <ul>
@@ -508,25 +570,23 @@
         </ul>
         <p>There are plenty of others that you can find by searching around. All services of this type provide PHP scripting and SQL-based database servers. Files are typically uploaded using an FTP client or via your web browser. (Few have Git or ssh upload support.) The only major disadvantage is that usually the only server-side scripting language they support is PHP. You can <a href="http://www.tutorialspoint.com/php7/index.htm">learn PHP here at tutorialspoint</a>.</p>
 
-        <p>You can also use this type of free account to serve static HTML pages with no PHP or database usage. They may be a better alternative to using KISSr or GitPages, though it is more difficult to upload files to them.</p>
+        <p>You can also use this type of free account to serve static HTML pages with no PHP or database usage. They may be a better alternative to using KISSr or GitPages.</p>
 
 
         <h2 class="anchor" id="advanced">Advanced Difficulty Level</h2>
 
         <p><strong>This section is very advanced, so be prepared to learn a lot of stuff if you want to do any of this.</strong></p>
 
-        <p>This section is recommended for college students or possibly some high school students who are hard-core computer geeks.</p>
-
-        <p>Once you get to this point, you are getting into the realm of professional web application development. You should know what server-side scripting is, what databases are, and have at least tinkered with these things.</p>
+        <p>This section is recommended for adults or possibly some high school students who are hard-core computer geeks.</p>
 
         <p>Before continuing, you should learn how to use <strong>command line interfaces</strong> (CLIs), also called shells. Which one you use will depend on which operating systems you are using. Web servers most frequently use Linux, so you will need to learn that no matter what. Fortunately for Mac users, OS X uses essentially the same command line interface as Linux with a few minor differences. Windows is a little different since PowerShell is now the preferred CLI, but you can install <span class="code">bash</span> or another Unix/Linux style shell in Windows if you want.</p>
 
         <p>Here are some resources that will help:</p>
         <ul>
             <li><a href="https://www.codecademy.com/learn/learn-the-command-line">Learn to use the shell command line</a> on CodeAcademy. This tutorial is interactive and will teach you to use Unix/Linux style command line shells, such as 'bash', even if you know nothing.</li>
-            <li>If you installed <a href="https://git-for-windows.github.io/">Git for Windows</a>, you already have a Linux-like shell called "Git Bash" that you can launch from the start menu. Just type "git bash" into the search box of the start menu. You don't have to be using Git to use the 'bash' shell. You can do anything with it, and it comes already configured for running git commands too. It recognizes the same sort of commands as 'bash' on Linux, but it doesn't allow you to run Linux software.</li>
+            <li>If you installed <a href="https://git-for-windows.github.io/">Git for Windows</a>, you already have a Linux-like shell called "Git Bash" that you can launch from the start menu. Just type "git bash" into the search box of the start menu. You don't have to be using Git to use the 'bash' shell. You can do anything with it, and it comes already configured for running git shell commands too. It recognizes the same sort of commands as 'bash' on Linux, but it doesn't allow you to run Linux software.</li>
             <li><a href="https://blog.udemy.com/powershell-tutorial/">A Beginner’s Introduction to Windows PowerShell</a> for those using Windows.</li>
-            <li>If you have Windows 10 and have installed the Anniversary Update, you can actualy <a href="http://www.howtogeek.com/249966/how-to-install-and-use-the-linux-bash-shell-on-windows-10/">install Microsoft's Linux command line environment on Windows</a>. This will not only give you a Linux shell, but you can also run actual Linux command line software. It is basically a Linux emulator, but it doesn't use a virtual machine and doesn't come with support for graphical applications by default.</li>
+            <li>If you have Windows 10 and have installed the Anniversary Update, you can actualy <a href="http://www.howtogeek.com/249966/how-to-install-and-use-the-linux-bash-shell-on-windows-10/">install Microsoft's Linux command line environment on Windows</a>. This will not only give you a Linux shell, but you can also run actual Linux command line software. It is a Linux emulator, but it doesn't use a virtual machine and doesn't come with support for graphical applications unless you use <code>apt-get</code> to install it.</li>
         </ul>
 
 
@@ -536,16 +596,12 @@
 
         <p>It is also possible to install Apache, PHP, python, ruby, and other languages with web application frameworks on your local computer for purposes of learning and testing.</p>
 
-        <p>If you haven't already then you probably want to install a database such as MySQL or PostgreSQL on your local computer.</p>
-        <ul>
-            <li><a href="http://mysql.com">MySQL</a> has a very good GUI management client with databae schema design diagramming built in. This is very useful for learning.</li>
-            <li><a href="http://www.postgresql.org/">PostgreSQL</a> is another very common full-featured relational database server. The GUI client isn't quite as fancy but it is still very good.</li>
-        </ul>
+        <p>If you haven't already then you probably want to install a database such as MySQL or PostgreSQL on your local computer. See above for links to some free database software.</p>
 
 
         <h3>Get a Free Containerized Cloud Hosting Account at Heroku</h3>
 
-        <p>Now that you know the CLI and know some things about both server-side scripting and databases, you might want to try out containerized <a href="https://en.wikipedia.org/wiki/Cloud_computing#Service_models">cloud computing</a> services. There is one that allows you to use Node.js and PostgreSQL for free called <a href="http://www.heroku.com/">Heroku</a> and it looks pretty impressive considering what you can do for free.</p>
+        <p>Now that you know the CLI and know some things about both server-side scripting and databases, you might want to try out containerized <a href="https://en.wikipedia.org/wiki/Cloud_computing#Service_models">cloud computing</a> services. There is one that allows you to use Node.js and PostgreSQL for free called <a href="http://www.heroku.com/">Heroku</a> and what they give you for free is pretty impressive.</p>
 
         <p>You will need to know how to use the CLI on your local computer because it's pretty much impossible to use Heroku without the CLI, but they have excellent step-by-step tutorials on how to deploy and manage applications on their service. You will also need to <a href="https://www.codecademy.com/learn/learn-git">learn to use Git from the command line</a>.</p>
 
@@ -556,45 +612,45 @@
 
         <p>You can simulate an IaaS cloud hosting server on your local computer using free virtual machine software. This is helpful because it gets you used to using a virtual server the same way you would using a virtual server hosting service.</p>
 
-        <p>Download <a href="https://www.virtualbox.org/wiki/Downloads">VirtualBox</a> (Virtual Machine hypervisor) and run a <a href="https://bitnami.com/stack/mean/virtual-machine">virtual machine image</a> installed with <a href="http://meanjs.org/">MEAN.JS</a> for example. There are a lot of other <a href="https://bitnami.com/stacks">virtual machine images</a> that you can experiment with.</p>
+        <p>Download <a href="https://www.virtualbox.org/wiki/Downloads">VirtualBox</a> (Virtual Machine hypervisor) and run a <a href="https://bitnami.com/stack/mean/virtual-machine">virtual machine image</a> installed with <a href="http://meanjs.org/">MEAN.JS</a> for example. There are a lot of other <a href="https://bitnami.com/stacks">virtual machine images</a> that you can experiment with including LAMP images.</p>
 
-        <p>Once you have a virtual machine running, you will want to treat it like some virtual machine that's running on an unknown rack mount server in some unknown location where you will never see it, because this is the situation with actual virtual machine hosting services. In other words, you want to treat your VM like a "headless" machine (one with no monitor or keyboard).</p>
+        <p>Once you have a virtual machine running, you will want to treat it like it's running on an unknown rack mount server in some unknown location where you will never see it, because this is the situation with actual virtual machine hosting services. In other words, you want to treat your VM like a "headless" machine (one with no monitor or keyboard).</p>
 
-        <p>To access and control your VM, you will <a href="http://www.makeuseof.com/tag/beginners-guide-setting-ssh-linux-testing-setup/">need to use ssh</a> which is a way to get a command line on remote computers and upload files. Hopefully your VM has Git installed on it, and the best practice for uploading changes to a site or web application is to use Git.</p>
+        <p>To access and control your VM, you will <a href="http://www.makeuseof.com/tag/beginners-guide-setting-ssh-linux-testing-setup/">need to use ssh</a> which is a way to get a command line on remote computers and upload files. Hopefully your VM image has git installed on it already because the best practice for uploading changes to a site is to use git.</p>
 
 
         <h3>Virtual Web Server Hosting</h3>
 
-        <p>Once you're familiar with virtual machine servers, you might want to create your own web site based on one and possibly run other types of servers on it such as game servers.</p>
+        <p>These days most people are actually happy with CaaS (Container as a Service) and PaaS type services because they do almost everything one could want but are less trouble to deal with than full virtual machines. But, once you're familiar with virtual machine servers, you might want to create your own web site based on one and possibly run other types of servers on it such as game servers.</p>
 
         <p><strong>This is very advanced, so you will need to learn a lot about system administration and web devlopment before you can make good use of an environment like this. Get comfortable with running a virtual server on your own computer first.</strong> Here are some recommendations.</p>
 
         <p>A <a href="https://www.digitalocean.com/products/one-click-apps/lamp/">virtual server hosting account</a> running a <a href="https://en.wikipedia.org/wiki/LAMP_(software_bundle)">LAMP</a> (Linux, Apache, MySQL, PHP) installation will do pretty much anything that one could want, but it isn't much different than the free LAMP-based web hosting accounts mentioned above. The main advantage is that you will have command line access and can do whatever you want with the virtual server.</p>
 
-        <p>A <a href="https://www.digitalocean.com/products/one-click-apps/mean/">virtual server hosting account</a> running <a href="http://meanjs.org/">MEAN.JS</a> provides an environment with <a href="http://docs.mongodb.org/manual/">MongoDB</a> and <a href="http://expressjs.com/">Express.js</a> plus <a href="https://nodejs.org/">Node.JS</a> for server-side scripting. This is a little more sophisticated than the previous option but it entirely uses JavaScript so learning PHP isn't necessary. Learning the JavaScript frameworks (Express.js, Node.js, and Angular.js) is necessary though, and you can learn more about some of those on <a href="https://www.codecademy.com/learn">CodeAcademy</a>. You can experiment with Node.JS and Express.JS at <a href="https://hyperdev.com/">HyperDev</a>.</p>
-
-        <p>Keep in mind virtual servers are an advanced topic and you want to be very comfortable with creating static web sites before delving into virtual servers, server-side scripting, and databases! These are hard core professional level environments.</p>
+        <p>A <a href="https://www.digitalocean.com/products/one-click-apps/mean/">virtual server hosting account</a> running <a href="http://meanjs.org/">MEAN.JS</a> provides an environment with <a href="http://docs.mongodb.org/manual/">MongoDB</a> and <a href="http://expressjs.com/">Express.js</a> plus <a href="https://nodejs.org/">Node.JS</a> for server-side scripting. This is a little more sophisticated than the previous option but it entirely uses JavaScript so learning PHP isn't necessary. Learning the JavaScript frameworks (Express.js, Node.js, and Angular.js) is necessary though, and you can learn more about some of those on <a href="https://www.codecademy.com/learn">CodeAcademy</a>. You can experiment with Node.js and Express.js at <a href="https://hyperdev.com/">HyperDev</a>.</p>
 
 
-        <h2 class="anchor" id="dm-frameworks">HTML/CSS/JS Desktop and Mobile Application Frameworks</h2>
+        <h2 class="anchor" id="dm-frameworks">Cross-Platform HTML/CSS/JS Desktop and Mobile Application Frameworks</h2>
 
-        <p>Not only can you make web sites and web applications using HTML/CSS/JavaScript technology, but you can also make both desktop and mobile applications using these skills. Desktop and mobile app development is significantly different than web development so it will require some additional learning.</p>
+        <p>Not only can you make web sites and web applications using HTML/CSS/JavaScript technology, but you can also make both desktop and mobile applications using these things. Desktop and mobile app development is significantly different than web development so it will require some additional learning.</p>
 
-        <p>These will all take quite a bit of learning and experimenting to use. They are more complicated than just creating web pages, but easier to learn for those already familiar with HTML/CSS/JS.</p>
+        <p>These will all take quite a bit of experimenting with to get used to. They are usually more complicated than just creating web pages, but easier to learn for those already familiar with HTML/CSS/JS. But, since they are cross platform, you don't have to write a completely different version of your application for each operating system.</p>
 
         <h3>Desktop Application Frameworks</h3>
 
-        <p>If you want to make a desktop app using HTML/CSS/JS then you might want to check out <a href="http://electron.atom.io/">Electron</a>, a desktop application framework that uses Node.js under the hood.</p>
+        <p>If you want to make a desktop app using HTML/CSS/JS then you might want to check out <a href="http://electron.atom.io/">Electron</a>, a desktop application framework that uses Node.js under the hood. The code editors Atom and VSCode were created with Electron, as were many other desktop applications, so it seems to be a pretty solid choice.</p>
+
+        <p>Once you create something with Electron you will be able to generate a Windows, OS X, and Linux version of your application with little to no additional work.</p>
 
         <h3>Mobile Application Frameworks</h3>
 
-        <p>For mobile applications the most popular ones seem to be:</p>
+        <p>For mobile applications the most popular JavaScript frameworks seem to be:</p>
         <ul>
-            <li><a href="https://www.nativescript.org/">NativeScript</a></li>
-            <li><a href="http://phonegap.com/">Adobe PhoneGap</a></li>
-            <li><a href="http://www.appcelerator.com/">Appcelerator Titanium</a></li>
+            <li><a href="https://www.nativescript.org/">NativeScript</a> (free)</li>
+            <li><a href="http://phonegap.com/">Adobe PhoneGap/Cordova</a> (free)</li>
+            <li><a href="http://www.appcelerator.com/">Appcelerator Titanium</a> (paid)</li>
         </ul>
-        <p>The first two are open source, but Titanium is proprietary.</p>
+        <p>Once you know how to use them you will be able to generate both Android, iOS, and even Windows Phone versions of your application with little or no additional work.</p>
 
 
         <h2>Conclusion</h2>
