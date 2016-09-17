@@ -1,7 +1,0 @@
-// Place your settings in this file to overwrite default and user settings.
-{
-    // Control whether or not jshint is enabled for JavaScript files.
-    "jshint.enable": true,
-    "htmlhint.enable": true,
-    "editor.glyphMargin": true
-}
