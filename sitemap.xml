@@ -1,15 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-        <loc>/</loc>
+        <loc>http://radix.cc/</loc>
         <changefreq>daily</changefreq>
     </url>
     <url>
-        <loc>/codeyourown-site
-        <changefrew>daily</changefreq>
+        <loc>http://radix.cc/codeyourown-site
+        <changefreq>daily</changefreq>
     </url>
     <url>
-        <loc>/codeyourown-site/sitemap.xml
-        <changefrew>daily</changefreq>
+        <loc>http://radix.cc/codeyourown-site/sitemap.xml
+        <changefreq>daily</changefreq>
+    </url>
+    <url>
+        <loc>http://www.radix.cc/</loc>
+        <changefreq>daily</changefreq>
+    </url>
+    <url>
+        <loc>http://www.radix.cc/codeyourown-site
+        <changefreq>daily</changefreq>
+    </url>
+    <url>
+        <loc>http://www.radix.cc/codeyourown-site/sitemap.xml
+        <changefreq>daily</changefreq>
     </url>
 </urlset>
