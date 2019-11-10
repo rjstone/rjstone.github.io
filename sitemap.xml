@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-        <loc>http://codingtech.site/</loc>
+        <loc>/</loc>
         <changefreq>daily</changefreq>
+    </url>
+    <url>
+        <loc>/codeyourown-site
+        <changefrew>daily</changefreq>
+    </url>
+    <url>
+        <loc>/codeyourown-site/sitemap.xml
+        <changefrew>daily</changefreq>
     </url>
 </urlset>
