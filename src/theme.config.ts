@@ -1,7 +1,7 @@
 import { defineThemeConfig } from './types'
 
 export default defineThemeConfig({
-  site: 'https://rjstone.new',
+  site: 'https://rjstone.net',
   title: 'RJSTONE.net',
   description: 'Personal Website of RJStone',
   author: 'Robert Stone',
@@ -36,7 +36,7 @@ export default defineThemeConfig({
   locale: 'en',
   mode: 'dark',
   modeToggle: true,
-  colorScheme: 'scheme-mono',
+  colorScheme: 'scheme-aurora',
   openGraphImage: undefined,
   postsPerPage: 4,
   projectsPerPage: 3,
