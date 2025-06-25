@@ -3,7 +3,7 @@ import { defineThemeConfig } from './types'
 export default defineThemeConfig({
   site: 'https://rjstone.net',
   title: 'RJSTONE.net',
-  description: 'Personal Website of RJStone',
+  description: 'Personal Blog, Projects, and public files of RJStone',
   author: 'Robert Stone',
   navbarItems: [
     { label: 'Blog', href: '/posts/' },
@@ -14,7 +14,7 @@ export default defineThemeConfig({
       label: 'Other pages',
       children: [
         { label: 'Landing page', href: '/' },
-        { label: '404 page', href: '/404' },
+        { label: 'A really cool 404 page', href: '/404' },
         { label: 'Tag: documentation', href: '/tags/documentation/' }
       ]
     }
@@ -48,7 +48,7 @@ export default defineThemeConfig({
     documentation: 'tabler--book'
   },
   shikiThemes: {
-    light: 'vitesse-light',
-    dark: 'vitesse-black'
+    light: 'github-light-default',
+    dark: 'github-dark-default'
   }
 })

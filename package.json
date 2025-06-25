@@ -1,24 +1,23 @@
 {
-  "name": "tmp",
+  "name": "rjstone-gh-pages",
   "type": "module",
   "version": "2.3.2",
-  "description": "A minimal Astro blog theme",
-  "author": "FjellOverflow",
+  "description": "Personal site for rjstone, based on the Nordlys template",
+  "author": "rjstone",
   "license": "GPL-3.0-only",
-  "homepage": "https://github.com/FjellOverflow/nordlys",
+  "homepage": "https://rjstone.net",
   "repository": {
     "type": "git",
-    "url": "https://github.com/FjellOverflow/nordlys.git"
+    "url": "https://github.com/rjstone/rjstone.github.io"
   },
   "bugs": {
-    "url": "https://github.com/FjellOverflow/nordlys/issues"
+    "url": "https://github.com/rjstone/rjstone.github.io/issues"
   },
   "keywords": [
     "astro",
     "blog",
-    "template",
-    "theme",
-    "tailwindcss"
+    "tailwindcss",
+    "nordlys"
   ],
   "scripts": {
     "dev": "astro dev",
@@ -26,7 +25,6 @@
     "check": "pnpm lint && astro check",
     "build": "astro build",
     "preview": "pnpm build && astro preview",
-    "release": "pnpm check && commit-and-tag-version --sign",
     "postbuild": "pagefind --site dist"
   },
   "dependencies": {
