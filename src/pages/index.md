@@ -6,7 +6,7 @@ logo: false
 ---
 
 This is\
-the minimal landing page\
+the landing page\
 of the web site\
 of rjstone.\
 I have a [blog](/posts/)\

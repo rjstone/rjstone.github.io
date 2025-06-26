@@ -14,8 +14,7 @@ export default defineThemeConfig({
       label: 'Other pages',
       children: [
         { label: 'Landing page', href: '/' },
-        { label: 'A really cool 404 page', href: '/404' },
-        { label: 'Tag: documentation', href: '/tags/documentation/' }
+        { label: 'Tag: embedded', href: '/tags/embedded/' }
       ]
     }
   ],
