@@ -25,7 +25,7 @@ is really the best option. (A dev container or VM might be more suitable.)
 
 Windows Subsystem for Linux with Ubuntu 22.
 
-```
+```bash
 
 > hostnamectl  status
 ...
@@ -52,7 +52,7 @@ things.
 
 ### Clone u-boot Repo
 
-```
+```bash
 
 git clone https://source.denx.de/u-boot/u-boot.git
 
@@ -69,7 +69,7 @@ It gets annoying, but some things use the name `arm64` to identify the ARM
 64-bit architecture target, and other things use `aarch64`.  For dpkg
 we need:
 
-```
+```bash
 
 > dpkg --add-architecture arm64
 > dpkg --print-foreign-architectures
@@ -88,7 +88,7 @@ in case it comes in handy.
 
 Here's what I'm installing.
 
-```
+```bash
 
 sudo apt update
 
@@ -109,7 +109,7 @@ just hangs in it's install hook script. I'm guessing it wants to add a kernel
 module that doesn't work in WSL or something. If preparation to work around
 this if needed (probably not needed for what I'm doing):
 
-```
+```bash
 
 sudo apt-add-repository -s
 cd <the same directory where I cloned u-boot>
@@ -129,7 +129,7 @@ wouldn't likely work in WSL.
 
 Additionally you may need (or at least want) these:
 
-```
+```bash
 
 sudo apt-get install arm-trusted-firmware-tools bsdutils bsdextrautils \
   bzip2 clang gdb-multiarch gdbserver git \
@@ -137,13 +137,13 @@ sudo apt-get install arm-trusted-firmware-tools bsdutils bsdextrautils \
 
 ```
 
-I'm mostly interested in the qemu there.
+(I'm mostly interested in the qemu there.)
 
 ### Set Env Variables
 
 This is the main one that needs to be set:
 
-```
+```bash
 
 export CROSS_COMPILE=aarch64-linux-gnu-
 
@@ -154,7 +154,7 @@ export CROSS_COMPILE=aarch64-linux-gnu-
 Or don't set the environment variable and invoke `make` like this every time
 as needed:
 
-```
+```bash
 
 CROSS_COMPILE=aarch64-linux-gnu- make <target_name>
 
@@ -162,7 +162,7 @@ CROSS_COMPILE=aarch64-linux-gnu- make <target_name>
 
 Optional things to set if you want to try using `clang`:
 
-```
+```bash
 
 export HOSTCC=clang
 export CC=clang
@@ -195,7 +195,7 @@ Use `unset CROSS_COMPILE` if set as an env var, because the
 sandbox tests just use native compilation. (Optionally
 add the `O=` or `V=` to the below if you want.)
 
-```
+```bash
 
 > make mrproper
 > make qtest
@@ -236,7 +236,7 @@ but at least there are some build instructions, which is a big time saver.
 
 From within my working base directory, which contains my `u-boot` directory:
 
-```
+```bash
 
 git clone https://github.com/TrustedFirmware-A/trusted-firmware-a.git
 cd trusted-firmware-a
@@ -303,7 +303,7 @@ something for the BL31 function and it might as well be the official firmware.
 First everything needs to be clean, then `make something_defconfig` where
 `something_defconfig` is one of the device default config files in `configs/`.
 
-```
+```bash
 
 > make distclean
 ....
@@ -323,7 +323,7 @@ the default configuration for the Pinebook Pro.
 
 If you ran `make help` you might have noticed this.
 
-```
+```bash
 
 > cd u-boot/
 > make help
@@ -404,7 +404,7 @@ before starting the build.
 One is optional if you don't mind "suspend to RAM" (sleep) not working properly
 on the Pinebook Pro. But if you do want this working:
 
-```
+```bash
 cd ..
 git clone https://github.com/rockchip-linux/rkbin
 cd u-boot
@@ -451,7 +451,7 @@ So even though I'd like source code for this, I think I'll just use the vendor's
 TPL for now and see how it works. At least I was able to build the TP-A image
 from source.
 
-```
+```bash
 
 cd u-boot
 export ROCKCHIP_TPL=../rkbin/bin/rk33/px30_ddr_333MHz_v1.16.bin
@@ -463,7 +463,7 @@ export BL31=../trusted-firmware-a/build/rk3399/release/bl31/bl31.elf
 
 After all that trouble, I'm ready to continue.
 
-```
+```bash
 
 make CROSS_COMPILE=aarch64-linux-gnu- -j8
 
@@ -476,7 +476,7 @@ I'm going through the process slowly enough to write all of this up.
 
 The successful build process left us with lots of stuff, including:
 
-```
+```bash
 
 > ls -l *.img *.bin *.itb
 -rw-r--r-- 1 rjstone rjstone  397312 Jun 30 02:44 idbloader-spi.img
