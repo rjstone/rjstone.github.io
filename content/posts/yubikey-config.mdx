@@ -1,15 +1,567 @@
 ---
-title: Configuring a Yubikey 5 to do Everything
-description: Things I learned configuring my YubiKey 5 to do ssh, PGP, and everything else.
-publishedDate: 2025-24-06
+title: "Configuring a Yubikey 5 to do Everything: Part 1"
+description: "Things I learned configuring my YubiKey 5."
+publishedDate: 2025-06-27
 draft: true
 tags:
   - yubikey
   - security
   - usb
+  - pgp
+  - ssh
 ---
 
-If you own a YubiKey that wasn't provided to you by the IT department at your workplace, and you've had to figure it all out youself, then you've probably run into some problems. The documentation seems to be rather spotty and not really the greatest.
+## Intro
 
-Here I will attempt to document everything I wish I had known to begin with, before I started tinkering with pretty much everything the device does.
+### What is a YubiKey?
+
+A [YubiKey](https://www.yubico.com/products/) is a popular smartcard-type
+cryptographic device sold by [Yubico](https://www.yubico.com/).
+
+While there is a
+[less expensive "consumer model"](https://www.yubico.com/products/security-key/)
+that only does FIDO/FIDO2, as well as some very expensive models with lots of
+certifications and stuff, the one that I have and will describe here is a
+[YubiKey 5 Series](https://www.yubico.com/products/yubikey-5-overview/).
+
+A model in this series is what you should get if you're an individual software
+developer who needs to sign things, or if you're anyone who needs to do anything
+other than just authenticate your login using FIDO, but you don't need FIPS
+certification
+
+Specifically I have the **YubiKey 5 NFC** model which is equipped with a USB-A
+connector and a NFC (Near Field Communication) transceiver. Other YubiKey 5
+models only differ in the types of connectors, size, and NFC capability. If
+curious you can see the whole
+[comparison table on the Yubico web site](https://www.yubico.com/store/compare/?products=yubikey-5c-nfc,yubikey-5-nfc,yubikey-5c,yubikey-5-nano,yubikey-5c-nano,yubikey-5ci).
+
+There's also a more
+[highly technical answer](https://docs.yubico.com/yesdk/users-manual/getting-started/what-is-a-yubikey.html)
+to the question here.
+
+### What's this post about?
+
+If you own a YubiKey that wasn't provided to you by your IT department, and
+you've had to figure it all out youself, then you've probably run into some sort
+of confusion. The documentation can be rather spotty, or you're looking at the
+wrong out-of-date document and the answer you want is somewhere else, or
+something isn't working as expected.
+
+But what it comes down to is that, while these devices can be easy to set up and
+use in some well-supported and highly automated cases (Webauthn), they can be a
+pain to configure for anything that's not completely automated.
+
+Here I will attempt to document everything I wish I had known to begin with,
+before I started tinkering with pretty much everything the device does. In later
+posts I'll poke around into the less user-practical technical detail.
+
+This is going to be in several parts because there's so much stuff to go over.
+The first installment will cover what I'm most interested in at the moment which
+is PGP and SSH.
+
+## Documentation
+
+First, I'll try to list all of the documentation I've found.
+
+* [docs.yubico.com Yubico Product Documentation Root](https://docs.yubico.com/) (Doesn't include all documentation!)
+* [YubiKey Technical Manual](https://docs.yubico.com/hardware/yubikey/yk-tech-manual/index.html)
+* [YubiKey SDK User's Manual](https://docs.yubico.com/yesdk/users-manual/getting-started/what-is-a-yubikey.html) (the real technical manual)
+* [dev.yubico Documentation](https://developers.yubico.com/) (See the links at the bar at the very top of the page with per-protocol documentation.)
+* [Yubico Support Articles](https://support.yubico.com/hc/en-us) (some seem out-of-date)
+* [YubiKey USB ID Values](https://support.yubico.com/hc/en-us/articles/360016614920-YubiKey-USB-ID-values)
+* [YubiKey 5 NFC Device Specifications](https://support.yubico.com/hc/en-us/articles/360013656980-YubiKey-5-NFC)
+* [Yubikey 5.2.3 Enhancements to OpenPGP 3.4](https://developers.yubico.com/PGP/YubiKey_5.2.3_Enhancements_to_OpenPGP_3.4.html)
+  (This one took me a while to find but is significant.)
+* [drduh/YubiKey-Guide](https://github.com/drduh/YubiKey-Guide) - Community guide to using YubiKey for GnuPG and SSH.
+
+## Software
+
+You will not need all of this software, but to start with here is a dump of all the links of things possibly mentioned below:
+
+* [GnuPG (gpg)](https://www.gnupg.org/download/index.html) - PGP implementation (package manager install usually safe)
+* [OpenSSH](https://www.openssh.com/) - or another ssh client (package manager install usually safe)
+* [Yubico Authenticator](https://www.yubico.com/products/yubico-authenticator/) - The GUI replacement for the soon to be EoL YubiKey Manager GUI.
+* [YubiKey Manager CLI](https://developers.yubico.com/yubikey-manager/) - The main CLI configuration tool which is NOT being End-of-Lifed, despite the similar name.
+* [Yubico PIV Tool](https://developers.yubico.com/yubico-piv-tool/) - Manual CLI tool for the Personal Identity Verification application (only) on the YubiKey.
+* [All other Yubico Software](https://developers.yubico.com/Software_Projects/) - Libraries, auth servers, etc.
+* [Yubico Software Signing Keys](https://developers.yubico.com/Software_Projects/Software_Signing.html) - For verifying digital signatures on the above.
+
+### What to Install
+
+This article will focus on setting up PGP, git commit signing with PGP, and ssh credentials.
+
+Therefore, make sure you have at least these installed:
+* **GnuPG** (Kleopatra is optional)
+* **OpenSSH** or another ssh implementation that will work with `gpg-agent`
+* **YubiKey Manager CLI** (the command line tools, _not_ the defunct EoL GUI app)
+* **Yubico PIV Tool** (the PIV keyslots can be optionally used for ssh)
+
+**For Windows:** If you're going to use `ykman` and not any of the Windows
+Domain or other native Windows support for PIV, then _do not_ install the
+[YubiKey Smart Card Minidriver](https://support.yubico.com/hc/en-us/articles/360015668919-YubiKey-smart-card-deployment-considerations).
+The functionality overlaps with and can conflict with both `ykman` and the
+Yubico Authenticator (GUI). For technical details, see
+[this article](https://support.yubico.com/hc/en-us/articles/360015668919-YubiKey-smart-card-deployment-considerations).
+
+### Check Version Numbers and Digital Signatures
+
+Package managers (apt-get, winget, etc) will usually install reasonably recent
+versions of gnupg and ssh, but it would be a good idea to check version numbers
+to be sure.
+
+Package managers usually also verify that packages are signed by whoever runs
+the package repository, but not necessarily the original developer. So checking
+those verification methods is also a good idea.
+
+The Yubico utilities, YubiKey Manager CLI and YubiCo PIV Tool, are almost always
+out-of-date in package manager repositories if they are there at all.
+I would strongly recommend [downloading those from Yubico](https://developers.yubico.com/Software_Projects/)
+and checking the [digital signatures and fingerprints](https://developers.yubico.com/Software_Projects/Software_Signing.html)
+on the downloaded release archives.
+
+## Small Detour: Physical Interface
+
+If you're like me then you want to know what this thing is doing when you plug
+it in to a USB port. On my Windows laptop I used a utility that's similar to
+`lsusb` to see what endpoints and transports my YubiKey advertises.
+
+### YubiKey USB Device and Interfaces
+
+```
+
+USB Composite Device 	Yubico-YubiKey OTP+FIDO+CCID-<Serial>	Yubico.com [0x1050]
+Yubikey 4/5 OTP+U2F+CCID [0x0407]	Full Speed - USB 1.1 [12Mb/s],
+Port: 1, Address: 46, Revision: 0x0543
+  - Configuration Descriptor	30 mA
+  - Child Device	USB Input Device
+      - Interface Descriptor	Type: 0x3/0x1/0x1 [Keyboard]	 	 	Interface Number: 0
+          - Endpoint Descriptor	Endpoint Address: 0x81, Max Packet Size: 8
+      - Child Device	HID Keyboard Device
+  - Child Device	USB Input Device
+      - Interface Descriptor	Type: 0x3/0x0/0x0 [HID]	 	 	Interface Number: 1
+          - Endpoint Descriptor	Endpoint Address: 0x04, Max Packet Size: 64
+          - Endpoint Descriptor	Endpoint Address: 0x84, Max Packet Size: 64
+      - Child Device	HID-compliant fido
+  - Child Device	Microsoft Usbccid Smartcard Reader (WUDF)
+      - Interface Descriptor	Type: 0xB/0x0/0x0	 	 	Interface Number: 2
+          - Endpoint Descriptor	Endpoint Address: 0x02, Max Packet Size: 64
+          - Endpoint Descriptor	Endpoint Address: 0x82, Max Packet Size: 64
+          - Endpoint Descriptor	Endpoint Address: 0x83, Max Packet Size: 8
+      - Child Device	Smart card filter driver
+
+```
+
+This is output from _Temple_, which is basically `lsusb` in a window. Unfortunately
+Windows doesn't like to make it as easy to retrieve this kind of info as `lsusb`.
+The closest pwsh command I can come up with is:
+
+```powershell
+
+  >gwmi Win32_USBControllerDevice |%{[wmi]($_.Dependent)} | Where-Object -Property HardwareID -Like "*VID_1050*" |  Sort Description,DeviceID | Select-Object -Property Name,Description,PNPClass,PNPDeviceID
+
+Name                                      Description                               PNPClass        PNPDeviceID
+----                                      -----------                               --------        -----------
+HID Keyboard Device                       HID Keyboard Device                       Keyboard        HID\VID_1050&PID_0407&MI_00\...
+HID-compliant fido                        HID-compliant fido                        HIDClass        HID\VID_1050&PID_0407&MI_01\...
+Microsoft Usbccid Smartcard Reader (WUDF) Microsoft Usbccid Smartcard Reader (WUDF) SmartCardReader USB\VID_1050&PID_0407&MI_02\...
+USB Composite Device                      USB Composite Device                      USB             USB\VID_1050&PID_0407\A&1893...
+USB Input Device                          USB Input Device                          HIDClass        USB\VID_1050&PID_0407&MI_00\...
+USB Input Device                          USB Input Device                          HIDClass        USB\VID_1050&PID_0407&MI_01\...
+
+```
+
+But anyway, the important thing here is that the YubiKey 5 (at least when everything is enabled on it)
+can advertise three types of interface:
+
+* A HID (USB) Keyboard
+* A HID FIDO/U2F Device
+* A CCID Smartcard Reader
+
+Also:
+
+* The VID (Vendor ID) = `0x1050`
+* The PID (Product ID) = `0x0407` at the moment, but
+  [it changes depending on enabled applications/features](https://support.yubico.com/hc/en-us/articles/360016614920-YubiKey-USB-ID-values)
+  on the YubiKey.
+
+### The USB Keyboard And Why That's Bad
+
+Initially I was a bit confused about the suspicious keyboard device, but after
+wasting some time poking around, I figured out that
+[there's actually some documentation](https://docs.yubico.com/yesdk/users-manual/yubikey-reference/transports/overview.html)
+that explains why a smartcard would want to seem like a "BadUSB" device.
+
+**If the OTP (One Time Password) application is enabled then the YubiKey will
+impersonate a keyboard so it can type OTPs for you.**
+
+Personally I think this is a bad idea, at least now when most people have 10's
+of different logins that need TOTP passwords and the YubiKey OTP application can
+only store two of them. The YubiKey can also store and transmit a static
+password which is an even worse idea.
+
+To make things even worse though, a usb key type device trying to impersonate a
+keyboard looks very suspicious since that's exactly what a "BadUSB" attack is.
+This can cause some alarm with any software designed to prevent this sort of
+attack.
+
+The OTP application seems to me like legacy stuff that predates the existance of
+needed drivers, deployment of better technology, etc, and fortunately you can
+just turn it off.
+
+### Disable the USB Keyboard
+
+Disabling this with `ykman` is pretty simple:
+
+```powershell
+
+> ykman config usb --disable otp
+USB configuration changes:
+  Disable Yubico OTP
+  The YubiKey will reboot
+Proceed? [y/N]: y
+USB application configuration updated.
+
+```
+
+With that done, the YubiKey reboots and when it reconnects the USB device
+enumeration dump shows:
+
+* Vendor/VID: Yubico.com [0x1050]
+* Product/PID: Yubikey 4/5 U2F+CCID [0x0406]
+* Only the FIDO and CCID USB interfaces
+* The HID keyboard is gone. Poof!
+
+I'm glad I finally got around to fixing that. (Previously I just had it
+whitelisted because I didn't think I could turn it off.)
+
+## GnuPG/OpenPGP Setup
+
+Finally, on to the practical stuff where we actually set up the key for
+something useful.
+
+### Before you start...
+
+The number one thing you need to know first is how the PIN numbers work and what
+the default PIN numbers are:
+
+* **The OpenPGP PIN Numbers are NOT the same as the PIV PIN numbers!**
+* These two different applications are like separate partitions with their own
+  data, including PINs, codes, keys, or whatever terminology is used.
+* Do not get them confused or....
+* If you enter the wrong PIN number 3 times, such as if you enter the PIV Admin
+  PIN or PIV Admin KEY instead of the OpenPGP Admin PIN, then **the OpenPGP
+  application will be locked and you'll have to `factory-reset` it.**
+* Default PGP PIN: `123456` (and it's still 123456 even if you set PIV PINs).
+* Default PGP Admin PIN: `12345678` (again, unrelated to whatever PIV is)
+* **I could be wrong about the above if your firmware version is much older or
+  newer than mine,** so I would strongly suggest checking the
+  [YubiKey Technical Manual](https://docs.yubico.com/hardware/yubikey/yk-tech-manual/yk5-apps.html#id24)
+  and verifying what they're supposed to be for your product and firmware
+  version.
+* Double checking this will save you time and headaches.
+* When you do check the YubiKey documentation, make sure you are looking under
+  the correct section for the _OpenPGP defaults_ if you're configuring OpenPGP.
+  (It's kind of easy to just see "Default Values" and just use them without
+  realizing you're in the section for the wrong application.)
+* Obviously the defaults are going to be really dumb sequences like this that
+  everyone knows, so it's kind of important to change them.
+
+Before changing the PINs though, there is one thing that **must** be done
+**before** anything else, if you're going to do it.
+
+### Enabling KDF
+
+The more recent Yubikey 5 cards support the **Key Derived Function (KDF)**
+protocol, which prevents PIN numbers from being sent over USB in the clear.
+Enabling this is a really good idea, but unfortunately it requires that you do
+it _before_ setting any of the PINs. This means that you'll need to do a factory
+reset on the OpenPGP application on the card to set it up (unless you're
+starting from factory reset condition).)
+
+With `gpg` installed, and using the shell, do this:
+
+```powershell
+
+> gpg --edit-card
+gpg/card> admin
+gpg/card> factory-reset
+gpg: OpenPGP card no. xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx detected
+
+gpg: Note: This command destroys all keys stored on the card!
+
+Continue? (y/N) y
+Really do a factory reset? (enter "yes") yes
+
+gpg/card> kdf-setup
+
+gpg/card> list
+
+Reader ...........: Yubico YubiKey OTP FIDO CCID 0
+Application ID ...: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+Application type .: OpenPGP
+...blabla...
+KDF setting ......: on
+...
+```
+
+The important thing is the setting that says `KDF setting ......: on`.
+This means that the **KDF** feature is now enabled, and PIN numbers won't be
+sent over USB in the clear where `logman` (Windows) and such can capture them.
+
+If you have anything stored in the PIV application, using `ykman piv info` at
+this point confirms that resetting the OpenPGP application didn't affect the PIV
+application:
+
+```powershell
+
+ > ykman piv info
+PIV version:              5.4.3
+PIN tries remaining:      10/10
+Management key algorithm: 12
+Management key is stored on the YubiKey, protected by PIN.
+CHUID: xxxxbblablaxxxxx
+CCC:   xxxblablabalxxxx
+Slot 9a:
+  Algorithm:   RSA2048
+  Subject DN:  CN=SSH-yk
+  Issuer DN:   CN=SSH-yk
+  Serial:      16819467078467873564
+  Fingerprint: 3002c302d685b4540d6682eff176fbd461b257736237c931bc871053983ea1d7
+  Not before:  2023-11-20T09:14:09
+  Not after:   2024-11-19T09:14:09
+
+```
+
+So expect the PIV PIN numbers to be the same ones you had set, or the defaults
+if you never set any, and don't lock the PIV app tring to enter the wrong ones.
+
+### Setting OpenPGP PINs/codes
+
+Now that we have KDF enabled, we can set the OpenPGP PINs which, again, are
+**NOT** the same PINs as the PIV pins! I know I keep repeating this but for some
+reason I didn't figure this out until I had managed to block the OpenPGP
+application a few times.
+
+Anyway, this could be done with `ykman` I think, but I did it with `gpg`.
+
+```powershell
+
+ > gpg --edit-card
+
+ ... blabla ...
+
+gpg/card> admin
+Admin commands are allowed
+
+gpg/card> passwd
+gpg: OpenPGP card no. xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx detected
+
+1 - change PIN
+2 - unblock PIN
+3 - change Admin PIN
+4 - set the Reset Code
+Q - quit
+
+Your selection?
+```
+
+It's relatively obvious how to change these, but make sure to pay attention to
+whether you're being asked to enter the **Admin PIN** or the (user) **PIN** when
+you do.
+
+Also notice that while the PIV application calls the PIV unblocking code a _PUK_
+(PIN Unlock Key), OpenPGP calls it a **Reset Code**.
+
+So, OpenPGP terminology:
+* PIN
+* Admin PIN
+* "Reset Code"
+
+And all totally separate from every other similarly named PIN, key, or code in
+some other application on the same device.
+
+### Key Generation Q1: Which algorithm?
+
+After doing some reading up on things (but not that much reading) and some
+thinking, I was pretty confident that I should just use ECC with
+[Ed25519](https://ed25519.cr.yp.to/) and
+[Curve25519](https://cr.yp.to/ecdh.html)
+
+* [Things that use Ed25519](https://ianix.com/pub/ed25519-deployment.html)
+* [Things that use Curve25519](https://ianix.com/pub/curve25519-deployment.html)
+
+GitHub documentation says that, for GPG, they support: RSA, ElGamal, DSA, ECDH,
+ECDSA, EdDSA. Basically, ECDH (Eliptic Curve Diffie-Hellman) is Cu25519 (also called X25519)
+and EdDSA ()
+
+### Key Generation
+
+The first idea that may come to mind when using a smartcard is "Gee, I should
+get the smartcard to generate the keypairs, tell it to never disclose the secret
+key, and then have it provide the public key. That way the secret key never
+escapes the smartcard and so it, at least theoretically, can't ever be stolen
+even if all the PIN numbers are."
+
+Unfortunately there are a few problems with internal key generation on the
+YubiKey unless you've really got a well-tested software and hardware
+infrastructure set up:
+
+- I haven't been able to get this to work with GPG. I can get the card to
+  generate keys, or so it says, but I can't seem to get the public keys off of
+  the card. It could be because of a bug in either GPG or the YubiKey firmware,
+  or a mismatch between the two of some sort, or I just don't know what I'm
+  doing, but whatever it is I can't get it to work with what I have now.
+
+- When there's no backup of the secret keys on the card, losing the card
+  (the YubiKey) means the secret keys are just permanently lost and have to be
+  replaced. This is much easier to deal with when you have a Public Key
+  Infrastructure in use, since the new keys can just be signed by the CA,
+  but more of an inconvenience when there's no central certification authority.
+
+As long as the keys are generated and backed up "offline", it isn't really that
+much less secure to generate them externally. And by "offline" I mean:
+
+1. Ideally: verify, "burn" and boot a bootable image like
+   [Tails](https://tails.net/install/index.en.html) from a USB flash drive on a
+   network-isolated computer. (This just helps ensure nothing is stored to your
+   hard drive, no malware is running, and even if it is it cant't have network
+   access.)
+1. If not: Booting an image can be a pain, so many people won't go that far,
+   but if you don't then:
+    - Make sure swapfile/pagefile encryption and wipe-on-boot is enabled.
+    - Save the backup keys, passphrase-encrypted, directly to their backup
+      storage.
+2. Don't permanently store the secret keys on your hard drive, even encrypted.
+3. Save off passphrase-encrypted backups to a flash drive, so that they require
+   physical access and a passphrase to obtain. (If using Tails or similar, you
+   can use the persistant storage option and use the Tails USB drive as your
+   backup for the keys as long as you keep it offline.)
+
+So my recommendation is to generate the keys externally and just follow good
+prodecures in doing so.
+
+Rather than repeat the procedure in another place on the Internet for the Nth
+time, I will provide some options and refer you to some guides as there is more
+than one way to do it these days.
+
+- [drduh/YubiKey-Guide](https://github.com/drduh/YubiKey-Guide?tab=readme-ov-file#prepare-gnupg) - Community guide to using YubiKey for GnuPG and SSH.
+- [Yubico Support: Using Your YubiKey with OpenPGP](https://support.yubico.com/hc/en-us/articles/360013790259-Using-Your-YubiKey-with-OpenPGP)
+  (The previous guide is better and seems more up to date.)
+- You can use [Kleopatra](https://apps.kde.org/kleopatra/), but unfortunately I
+  can't find proper documentation for the smartcard functions. I tried using
+  Kleopatra for this initially, but didn't end up with what I wanted exactly so
+  I deleted the keys and started over using the
+  [first guide](https://github.com/drduh/YubiKey-Guide?tab=readme-ov-file#prepare-gnupg)
+  I listed.
+
+#### Enable UIF (User Interaction Flags)
+
+I would recommend turning on the User Interaction Flag (UIF) for each
+cryptographic function. This means that someone is required to touch the contact
+sensor "button" on the card before these functions will execute. This helps
+ensure that even if someone stole the PIN, and manages to connect to a computer
+with the card inserted in it, they wouldn't be able to use the card remotely
+without someone else to touch the touchpad for them.
+
+This is more important to do for computers with the little tiny cards that are
+designed to be left in a USB port all the time.
+
+```powershell
+
+UIF setting ......: Sign=off Decrypt=off Auth=off
+...
+gpg/card> uif 1 on
+gpg/card> uif 2 on
+gpg/card> uif 3 on
+gpg/card> list
+...
+UIF setting ......: Sign=on Decrypt=on Auth=on
+
+```
+
+It's also possible to lock those to "on" permanently to make sure an attacker
+can't disable them then proceed to use the card.
+
+
+#### Setting PIN Retry Limits
+
+The default OpenPGP limits are 3 tries for each PIN/code type. However, if you
+have relatively long PIN numbers for the _Reset Code_ and _Admin PIN_ then such
+a low retry limit is probably overkill for those.
+
+My suggestion is that you use something relatively short, like 6-8 digits, for
+the (user) _PIN_ and leave the retry count on that set to 3. After all, you
+shouldn't be forgetting this or mistyping it too easily. Also, if you (or
+software problems) enter this incorrectly 3 times you can still unblock the card
+with the _Reset Code_.
+
+But then set the _Reset Code_ and _Admin PIN_ to longer numbers, like 10+
+digits, and set the rety limits on those to 10. These don't need to be used very
+often, but problems with software (like trying to use a client that doesn't
+support KDF, or just a software bug) could cause PIN numbers to be sent to the
+card incorrectly multiple times. If the _Admin PIN_ retry limit is exceeded then
+the OpenPGP application is bricked and must be factory-reset. I'm pretty sure
+the situation is the same with the _Reset Code_ as well.
+
+Using 10 retries basically subtracts one digit from the length of a decimal
+number in guessing probability terms, so if the number is relatively long (10+
+digits) this won't be so bad. It will still be harder to get lucky with random
+guesses than guessing a 6 digit PIN with 3 tries. (10^10 - 10 > 6^10 - 3, unless
+I'm failing at math.)
+
+So here's how you set that with `ykman`:
+
+```powershell
+
+> ykman openpgp access set-retries 3 10 10
+Enter Admin PIN:
+Set PIN retry counters to: 3 10 10? [y/N]: y
+
+```
+
+
+### Configuring `git` to Sign Commits
+
+First, you need to find the keyid that `git` will need to pass to `gpg`. This needs to be the one marked `[SC]` (sign, certify)
+and if you used Curve25519 then it will be a **ed**25519 key.
+
+```powershell
+
+> gpg --list-keys --keyid-format=long rjstone
+...old stuff old stuff....
+pub   ed25519/2D0B5DE3A56DE179 2025-06-27 [SC] [expires: 2035-06-26]
+      1F0C2EDB93E80EE96B9DD8BE2D0B5DE3A56DE179
+uid                 [ultimate] Robert Stone <xxxxxxxx@xxxxxx.xxx>
+sub   cv25519/33DB3C926B8F491E 2025-06-27 [E] [expires: 2035-06-26]
+
+```
+
+So in this case the ID that I'm looking for is `2D0B5DE3A56DE179`.
+
+We can match this with the one on the card like this:
+
+```powershell
+
+> gpg-card.exe list
+Reader ...........: Yubico YubiKey OTP FIDO CCID 0
+Card type ........: yubikey
+Card firmware ....: 5.4.3
+...blablablabla....
+Signature key ....: 0F2624B753067794465305F7552991D489E82047
+      keyref .....: OPENPGP.1  (sign,cert)
+      algorithm ..: ed25519
+      stored fpr .: 1F0C2EDB93E80EE96B9DD8BE2D0B5DE3A56DE179
+      created ....: 2025-06-27 06:42:34
+      used for ...: OpenPGP
+        main key .: <this>
+        fpr ......: 1F0C2EDB93E80EE96B9DD8BE2D0B5DE3A56DE179
+        created ..: 2025-06-27 06:42:34
+        user id ..: Robert Stone <xxxx@yyyyyy.zzz>
+....
+```
+
+We don't see the keyid on the card, but we do see the "fpr" (fingerprint) and
+can compare that `1F0C2EDB93E80EE96B9DD8BE2D0B5DE3A56DE179` matches the
+`1F0C2EDB93E80EE96B9DD8BE2D0B5DE3A56DE179` that gpg has stored in its public key
+list. So we know that's the right one.
 
