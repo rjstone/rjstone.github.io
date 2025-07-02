@@ -4,6 +4,7 @@ author: Robert Stone
 startDate: 2025-06-14
 draft: false
 tags:
+  - projects
   - web
 ---
 

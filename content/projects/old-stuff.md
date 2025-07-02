@@ -6,6 +6,9 @@ endDate: 2021-01-01
 draft: true
 tags:
   - projects
+  - web
+  - devops
+  - gamedev
 ---
 
 ### discord-webhook-notify GitHub Action
