@@ -1,0 +1,160 @@
+---
+title: "Using WSL and 'dd' to Image U-Boot Firmware to SDcard"
+description: "And how to share host USB devices in general with WSL."
+publishedDate: 2025-07-02
+draft: false
+tags:
+  - u-boot
+  - pine64
+  - wsl
+---
+
+Last time there was something I forgot to cover, because everything was going so
+smoothly that I completely forgot that I was even using WSL, and thus should try
+to cover anything unusual about using WSL in this situation.
+
+So this will quickly cover how you can get a USB device in Windows (like a
+sdcard reader) to show up in WSL as a block device.
+
+*Note that this is specific to USB devices, and non-USB devices will need a
+different method of pass-through.*
+
+## 1. Install Software
+
+For things to execute in PowerShell in windows I'll use the prompt `PS>`
+and for WSL I'll use `>` as the bash prompt.
+
+The two software packages I'm recommending for this are:
+
+1. [USBipd-win](https://github.com/dorssel/usbipd-win)
+2. [gsudo](https://gerardog.github.io/gsudo/) (optional) - proper `sudo` for Windows
+
+The second is technically optional, because you can also just run PowerShell as
+an administrator for the one command that needs it.
+
+Easiest way to get these:
+
+```powershell
+winget install dorssel.usbipd-win
+winget install gerardog.gsudo
+$env:PATH += ";$env:ProgramFiles\usbipd-win"
+Import-Module gsudoModule
+```
+
+## 2. Eject SDCard
+
+If you have anything inserted in your card reader that windows has mounted,
+you want to "eject" it (unmount it). `usbipd` will need to make the device
+unavailable to Windows to make it available to WSL. So Windows won't be happy
+if it disappears when a mounted storage volume is depending on it.
+
+## 3. Identify USB Device VID/PID
+
+Windows unfortunately makes this a pain, but extra work may not be needed due to
+a nice option in `usbipd list`.
+
+```powershell
+PS>  usbipd list -u
+Connected:
+BUSID  VID:PID    DEVICE                                                        STATE
+...
+9-4    1189:8840  Acer Communications & Multimedia, Unknown device              Not shared
+14-1   05e3:0751  Genesys Logic, Inc., microSD Card Reader                      Not shared
+14-4   25a4:9311  Unknown device                                                Not shared
+```
+
+You can also try it without the `-u` but usually `-u` will be more useful since
+Windows only has generic names for these things, like "usb mass storage device".
+
+Another way, in case it's needed, is to try to dig this out of Windows. One way
+to do it is to run this, which isn't ideal but I'm not willing to write a whole
+PowerShell script to do a better job (which is what would be required):
+
+```powershell
+PS> Get-PnpDevice -PresentOnly -Class "DiskDrive" | foreach-object { $_ | Get-PnpDeviceProperty DEVPKEY_name ; $_ | Get-PnpDeviceProperty DEVPKEY_Device_Parent } | format-table KeyName, Data
+...
+KeyName               Data
+-------               ----
+DEVPKEY_name          ADATA EC700G SCSI Disk Device
+DEVPKEY_Device_Parent USB\VID_0BDA&PID_A03A\MSFT30000000001160
+DEVPKEY_name          Generic STORAGE DEVICE USB Device
+DEVPKEY_Device_Parent USB\VID_05E3&PID_0751\6&2b3456b5&0&1
+```
+
+In this case I know the ADATA one is a large USB SSD, and the "Generic Storage
+Device" is the card reader. These are usually going to show up as generic USB
+storage devices just like USB thumb drives.
+
+What we can use here is the `USB\VID_05E3&PID_0751` part which tells us we
+want to use the one with VID=0x05E3 and PID=0x0751.
+
+Comparing with the above, we can see that this matches the one with busid 14-1.
+
+So now we know what we need to attach to WSL.
+
+## 4. Bind Device to USBIPD
+
+```powershell
+PS> usbipd bind -h
+usbipd-win 5.1.0
+
+Description:
+  Registers a single USB device for sharing, so it can be attached to other machines. Unless the --force option is used, shared devices remain available to the host
+  until they are attached to another machine.
+
+  Exactly one of the options '--busid' or '--hardware-id' is required.
+
+Usage:
+  usbipd bind [options]
+
+Options:
+  -b, --busid <BUSID>          Share device having <BUSID>
+  -f, --force                  Force binding; the host cannot use the device
+  -i, --hardware-id <VID:PID>  Share device having <VID>:<PID>
+  -?, -h, --help               Show help and usage information
+```
+
+This will install a driver that will allow the device to be "attached" when
+needed, but left for windows to use the rest of the time.
+
+```powershell
+PS> gsudo usbipd bind --busid <insert actual ID here> # or --hardware-id <VID:PID>
+```
+
+Once that's done, you no longer need Administrator privileges to attach or
+detach the device from now on. So as a normal user:
+
+```powershell
+PS> usbipd attach --wsl --busid <busid> # or use --hardware-id <VID:PID>
+usbipd: info: Using WSL distribution 'Ubuntu' to attach; the device will be available in all WSL 2 distributions.
+usbipd: info: Detected networking mode 'nat'.
+usbipd: info: Using IP address 172.21.192.1 to reach the host.
+```
+
+When you want to give this back to windows, just run the `usbipd detach` command
+in the same manner.
+
+## 5. Use Device in WSL
+
+The easiest way to confirm that the device showed up in wWSL is this:
+
+```bash
+> dmesg
+.... lots of stuff ...
+[91285.792564] scsi 1:0:0:0: Direct-Access     Generic  STORAGE DEVICE   1404 PQ: 0 ANSI: 6
+[91285.794836] sd 1:0:0:0: Attached scsi generic sg6 type 0
+[91286.034145] sd 1:0:0:0: [sdg] 31459328 512-byte logical blocks: (16.1 GB/15.0 GiB)
+[91286.037572] sd 1:0:0:0: [sdg] Write Protect is off
+[91286.037576] sd 1:0:0:0: [sdg] Mode Sense: 21 00 00 00
+[91286.040275] sd 1:0:0:0: [sdg] Write cache: disabled, read cache: enabled, doesn't support DPO or FUA
+[91286.091552]  sdg: sdg1 sdg2
+[91286.092386] sd 1:0:0:0: [sdg] Attached SCSI removable disk
+```
+
+You should see something like that. `lsusb` can also be used but it's more
+trouble to get the block device out of it.
+
+In my case, the device is `/dev/sdg`
+
+And now you can use `dd` or whatever meeds direct low level access to the device
+in WSL.
