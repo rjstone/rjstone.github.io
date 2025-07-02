@@ -6,6 +6,7 @@ draft: false
 tags:
   - u-boot
   - pine64
+  - wsl
 ---
 
 ## What This Is About
@@ -23,10 +24,10 @@ is really the best option. (A dev container or VM might be more suitable.)
 
 ## What I'm Using
 
-Windows Subsystem for Linux with Ubuntu 22.
+Windows Subsystem for Linux v2 with Ubuntu 22. I think this is just the default
+Linux distribution for WSL these days.
 
 ```bash
-
 > hostnamectl  status
 ...
          Chassis: container
@@ -42,26 +43,12 @@ Kernel version: 6.6.87.1-1
 WSLg version: 1.0.66
 ...
 Windows version: 10.0.26100.4351
-
 ```
 
 ## What I'm Doing
 
 I'll try to get all these steps in the right order according to how I'm doing
 things.
-
-### Clone u-boot Repo
-
-```bash
-
-git clone https://source.denx.de/u-boot/u-boot.git
-
-git checkout v2025.07-rc5
-
-```
-
-I figure that ought to be very recent without being too unstable. (Usually rc5
-or rc6 is the last rc before release.)
 
 ### Add arm64 to `dpkg`
 
@@ -70,11 +57,9 @@ It gets annoying, but some things use the name `arm64` to identify the ARM
 we need:
 
 ```bash
-
 > dpkg --add-architecture arm64
 > dpkg --print-foreign-architectures
 arm64
-
 ```
 
 Most other things will refer to ARM architecture as `aarch64` (or the same
@@ -89,7 +74,6 @@ in case it comes in handy.
 Here's what I'm installing.
 
 ```bash
-
 sudo apt update
 
 sudo apt-get install bc bison build-essential coccinelle \
@@ -101,16 +85,17 @@ sudo apt-get install bc bison build-essential coccinelle \
   python3-pytest python3-pytest-xdist python3-sphinxcontrib.apidoc \
   python3-sphinx-rtd-theme python3-subunit python3-testtools \
   python3-venv swig uuid-dev python3-setuptools
-
 ```
 
-The package `libguestfs-tools` is omitted because it depends on `mdadm` which
-just hangs in it's install hook script. I'm guessing it wants to add a kernel
-module that doesn't work in WSL or something. If preparation to work around
-this if needed (probably not needed for what I'm doing):
+This is the list of
+[dependencies](https://docs.u-boot.org/en/latest/build/gcc.html#dependencies) in
+the u-boot docs minue the package `libguestfs-tools` because it depends on
+`mdadm` which just hangs in WSL in it's install hook script. I'm guessing it
+wants to add a kernel module that doesn't work in WSL or something. If
+preparation to work around this if needed (probably not needed for what I'm
+doing):
 
 ```bash
-
 sudo apt-add-repository -s
 cd <the same directory where I cloned u-boot>
 ls .
@@ -120,57 +105,65 @@ ls .
   libguestfs-1.46.2                 libguestfs_1.46.2-10ubuntu3.debian.tar.xz
   libguestfs_1.46.2-10ubuntu3.dsc   libguestfs_1.46.2.orig.tar.gz
   u-boot
-
 ```
 
-But when dealing with WSL, be prepared to not just be able to install debian
-packages for absolutely everything, especially when they are things that
-wouldn't likely work in WSL.
+But when dealing with WSL, be prepared for some debian packages to not "just
+work", especially when they are things that would expect to be able to add
+kernel modules.
 
-Additionally you may need (or at least want) these:
+Additionally you may need or want these:
 
 ```bash
-
 sudo apt-get install arm-trusted-firmware-tools bsdutils bsdextrautils \
   bzip2 clang gdb-multiarch gdbserver git \
   qemu qemu-system qemu-user qemu-utils xz-utils
-
 ```
 
-(I'm mostly interested in the qemu there.)
+The only one absolutely needed there is `git`, if it's not already installed..
+
+### Clone u-boot Repo
+
+```bash
+git clone https://source.denx.de/u-boot/u-boot.git
+git checkout v2025.07-rc5
+```
+
+Right now, I figure that `v2025.07-rc5` ought to be very recent without being
+too unstable. (Usually rc5 or rc6 is the last rc before release, but the
+release for v2025.07 isn't tagged yet.)
 
 ### Set Env Variables
 
 This is the main one that needs to be set:
 
 ```bash
-
-export CROSS_COMPILE=aarch64-linux-gnu-
-
+> export CROSS_COMPILE=aarch64-linux-gnu-
 ```
 
 (Notice the `aarch64` this time.)
 
-Or don't set the environment variable and invoke `make` like this every time
-as needed:
+Or don't set the environment variable and invoke `make` with it set like this
+every time when needed:
 
 ```bash
+> CROSS_COMPILE=aarch64-linux-gnu- make [target_name]
+```
 
-CROSS_COMPILE=aarch64-linux-gnu- make <target_name>
+Supplying this as a `make` variable also works:
 
+```bash
+> make CROSS_COMPILE=aarch64-linux-gnu- [target_name]
 ```
 
 Optional things to set if you want to try using `clang`:
 
 ```bash
-
 export HOSTCC=clang
 export CC=clang
-
 ```
 
-You can also use a specific output directory by adding `O=` as in `O=/tmp/build/artifacts`
-as an argument to the `make` command.
+You can also use a specific output directory by adding `O=` as in
+`O=/tmp/build/artifacts` as an argument to the `make` command.
 
 Use `V=1` (or a larger number) for more verbose make output.
 
@@ -196,10 +189,8 @@ sandbox tests just use native compilation. (Optionally
 add the `O=` or `V=` to the below if you want.)
 
 ```bash
-
 > make mrproper
 > make qtest
-
 ....
 ```
 
@@ -237,20 +228,18 @@ but at least there are some build instructions, which is a big time saver.
 From within my working base directory, which contains my `u-boot` directory:
 
 ```bash
-
 git clone https://github.com/TrustedFirmware-A/trusted-firmware-a.git
 cd trusted-firmware-a
 make realclean
 make CROSS_COMPILE=aarch64-linux-gnu- PLAT=rk3399
 ........build messages spew........
 cd ..
-
 ```
 
 And thankfully that works like a charn. I now have `trusted-firmware-a/build/rk3399/release/bl31/bl31.elf`
 which I will soon need.
 
-#### What BL31.elf Actually Is
+#### What `BL31.elf` Actually Is
 
 Simple answer: This is some stock ARM BSP (Board Support Package) firmware for
 the ARM IP (chip design) used by Rockchip on this particular model of chip
@@ -260,11 +249,10 @@ this.
 
 More complicated answer: This is a particularly critical part of the firmware
 that executes at a maximum "super supervisor" privilege level (EL3 or [Exception
-Level](https://krinkinmu.github.io/2021/01/04/aarch64-exception-levels.html) 3) where it can mediate access to registers and functions that
-less-priviledged software (such as an operating system) or less privileged
-firmware (like u-boot) shouldn't be able to access directly. This includes
-things like the power, reset, and execution state of the CPU cores and the
-"master control blocks" themselves.
+Level](https://krinkinmu.github.io/2021/01/04/aarch64-exception-levels.html) 3,
+which is above the hypervisor level EL2) and acts as a firewall between what
+[the documentation](https://trustedfirmware-a.readthedocs.io/en/latest/getting_started/image-terminology.html)
+calls the "normal world" and the "secure world".
 
 Therefore it makes sense to use the smallest most solid computer program
 possible to control access to these sorts of functions and restrict them
@@ -272,39 +260,39 @@ appropriately. Without a solid security mechanism, "rootkit" software could
 make itself invisible then do anything to anything by having the most
 unrestricted access to everything's state.
 
-Thus the name "trusted" to indicate that it occupies such a priviledged
-position, trusted with the most critical functions, that everthing it does is
-assumed to be secure by the rest of the design. That doesn't mean it's actually
-completely secure, but if this is compromised then everything is. So it has to
-be trusted and seriously needs to be trustworthy.
+The name "trusted" indicates that it occupies a priviledged position where it
+must be considered secure by the rest of the design. That doesn't mean it's
+automatically trust*worthy*, but if this is compromised then everything is. So
+it has to be trusted by design, and actually _being trustworthy_ would be its
+main design objective.
 
-To prevent tampering, ideally this kind of thing (like the rest of the firmware)
-should only be loaded and executed by a SoC if it has a digital signature that
-should only be verifiable if the firmware has been approved by the owner,
-manufacturer, etc. But the Pinebook Pro doesn't come with these features
-enabled, and I have read that this particular Rockchip design (rk3399) might not
-be able to verify firmware signatures properly or something.
+To prevent tampering, ideally this especially (like the rest of the firmware)
+should be verified stating with a hardware root of trust. That is, it should
+only be loaded and executed by a SoC if it has a digital signature that should
+only be verifiable if the firmware image has been approved by the owner,
+manufacturer, etc., as indicated by a one-time-programmable CA certificate in
+the SoC.
 
-So it's one of the things I want to get to the bottom of eventually.
+But the Pinebook Pro doesn't come with these features enabled/configured, and I
+have read that this particular Rockchip design (rk3399) might not be able to
+verify firmware signatures properly or something. (It's one of the things I want
+to get to the bottom of eventually.)
 
 Anyway, more information on the BL31 functions are here:
-- [Arm Trusted firmware BL31](https://developer.arm.com/documentation/102337/0000/Software-stack/Application-processor-firmware/Arm-Trusted-firmware-BL31)
-
-But what it amounts to is that it controls access by other firmware to
-critical system functions. (For a request to actually get here, it actually
-has to go through other firmware that an OS is allowed to communicate with.)
+- [ARM Trusted firmware BL31](https://developer.arm.com/documentation/102337/0000/Software-stack/Application-processor-firmware/Arm-Trusted-firmware-BL31)
+- [TF-A Firmware Image Terminology](https://trustedfirmware-a.readthedocs.io/en/latest/getting_started/image-terminology.html#firmware-image-package-fip) (more detail)
 
 So, unlike [BL1](https://developer.arm.com/documentation/102337/0000/Software-stack/Application-processor-firmware/Arm-Trusted-firmware-BL1)
 (which is permanently burned into the chip) any firmware needs to include
-something for the BL31 function and it might as well be the official firmware.
+something for the BL31 functions and it might as well be the official firmware
+(which you can build yourself to help ensure that it isn't "rootkitted").
 
-### `make` the Config (.config)
+### `make` the Config (`.config`)
 
 First everything needs to be clean, then `make something_defconfig` where
 `something_defconfig` is one of the device default config files in `configs/`.
 
 ```bash
-
 > make distclean
 ....
 > make -j8 pinebook-pro-rk3399_defconfig
@@ -313,6 +301,8 @@ First everything needs to be clean, then `make something_defconfig` where
 # configuration written to .config
 #
 ```
+
+(`-j8` is optional and means parallel processing, with 8 processes.)
 
 In my case, the defconfig file is `pinebook-pro-rk3399_defconfig`.
 
@@ -324,10 +314,8 @@ the default configuration for the Pinebook Pro.
 If you ran `make help` you might have noticed this.
 
 ```bash
-
 > cd u-boot/
 > make help
-
 ...
 Configuration targets:
   config          - Update current config utilising a line-oriented program
@@ -336,16 +324,15 @@ Configuration targets:
   xconfig         - Update current config utilising a Qt based front-end
   gconfig         - Update current config utilising a GTK+ based front-end
 .....blabla...
-
 ```
 
-These launch various options for editing the `.config` file to change the
+These launch different editors for the `.config` file to change the
 options from the defaults that were copied from the `_defconfig` file for your
 device.
 
-In my opinion, the best one to use is `make nconfig` because it provides easy
+In my opinion, the best one to use is `nconfig` because it provides easy
 access to all the options. `menuconfig` is essentially just a color version of
-`nconfig` with less convenient keymappings.
+`nconfig` with less convenient keymappings, but it's almost the same.
 
 I don't want to bother to install the dependencies needed to compile the GUI
 equivalents, so I'm ignoring those. `config` is very inconvenient because it
@@ -379,20 +366,20 @@ Two main bits of advice:
 
 - Some settings might normally be perfectly fine to enable, but the feature is
   broken for your particular device, or there's a dependent feature that doesn't
-  automatically get enabled and you didn't know. So you can end up with some
-  configurations that prevent the firmware from building, or that just lock up
-  after boothing. For this reason it's not a good idea to change too many things
-  before testing, otherwise it may be difficult to figure out what caused a
-  problem.
+  automatically get enabled and you're not sure what it is. So you can end up
+  with some seemingly valid configurations that prevent the firmware from
+  building, or that just lock up after boothing. For this reason it's not a good
+  idea to change too many things before testing, otherwise it may be difficult
+  to figure out what caused a problem.
 
 - If there's a build error, check any related settings that you changed to see
-  if it's caused by that.
+  if it's caused by that and a missing dependency.
 
 So just keep in mind that not all combinations of all options are guaranteed to
-work even when the options seem unrelated. Not every feature is "there yet" on
-every platform.
+work even when the options seem fine. Not every feature is "there yet" on every
+platform.
 
-In short, don't expect any of the config to be idiot-proof.
+Don't expect any of the config to be idiot-proof.
 
 ### Use U-Boot TPL or Vendor "TPL"?
 
@@ -420,53 +407,48 @@ To [explain this and the boot process](https://wiki.pine64.org/wiki/RK3399_boot_
 a little better, these are the different firmware images that get executed at
 boot:
 
-1. **BROM** - Boot ROM, can't be changed, burned into the chip, is the first thing
-   to start executing. This initializes the SoC (System on a Chip), that is the
-   whole RK3399 (or at least things that need immediate setup like clocks, etc).
-2. **TPL** - Tertiary Program Loader (u-boot terminology) - this initializes
-   DRAM and returns control to the BROM. Not much else happens here. (u-boot can
-   be configured to try adding a few extra things here when it builds this
-   part.)
-3. **SPL** - Secondary Program Loader (u-boot term) - Loaded and executed by
+1. **BROM** (BL1) - Boot ROM, can't be changed, burned into the chip, is the
+   first thing to start executing. This initializes the SoC (System on a Chip),
+   (or at least things that need immediate setup like clocks, etc).
+2. **TPL** (BL2) - Tertiary Program Loader (u-boot terminology) - this
+   initializes DRAM and returns control to the BROM. Not much else
+   happens here. (u-boot can be configured to try adding a few extra things here
+   when it builds this part, but not much makes sense to add.)
+3. **SPL** (BL2) - Secondary Program Loader (u-boot term) - Loaded and executed by
    BROM after the TPL returns. Now that RAM should all be working, this loads up
    the remaining firmware, that being TF-A and u-boot, then executes TF-A.
-4. **TF-A** - The Trusted Firmware A for the BL31 block on the chip which runs
+   (In some cases this can contain extra stuff beyond the norm.)
+4. **TF-A** (BL31) - The Trusted Firmware A for the BL31 phase (3.1) which runs
    at EL3 (Exception Level 3, highest privilege). Once it's done initializing it
-   drops the EL to EL2 and then executes u-boot. It then stays resident, and
-   remains dormant until something asks it to do something requiring EL3
-   privileges.
-5. **u-boot** - Finally, after all that rigamarole, u-boot gets to start at EL2.
-   Only here do we actually get to what you think of as a normal OS boot loader.
-   Once done with it's stuff, it drops to EL1 and loads an OS kernel to execute
-   at EL1. (The OS could still execute stuff, like a hypervisor, at EL2 if it's
-   allowed to.)
+   drops the EL to EL2 or EL1 and then executes u-boot. It then stays
+   resident, and remains dormant until something asks it to do something
+   requiring EL3 super powers.
+5. **u-boot** (BL33) - Finally, after all that rigamarole, u-boot gets to start
+   at EL2 or EL1. *Only here do we actually get to what you think of as a normal
+   OS boot loader.* Everything else is really Firmware (what's contained in the
+   "BIOS" flash chip on a regular PC.) Once done with it's stuff, it drops to
+   EL1 and loads an OS kernel to execute at EL1. (EL2 is the hypervisor level
+   for virtualization, so this could be used if virtualization is in play.)
 
 So basically the vendor image `px30_ddr_333MHz_v1.16.bin` is a complete
 replacement for what u-boot would ordinary supply as "TPL".
 
-The only reason why you wouldn't want to just use u-boot's TPL is if it is, say,
-lacking functions needed for "sleep mode" to work properly on your device.
-
 So even though I'd like source code for this, I think I'll just use the vendor's
-TPL for now and see how it works. At least I was able to build the TP-A image
-from source.
+TPL for now and see how it works for "sleep mode". At least I was able to build
+the TP-A image from source.
 
 ```bash
-
 cd u-boot
 export ROCKCHIP_TPL=../rkbin/bin/rk33/px30_ddr_333MHz_v1.16.bin
 export BL31=../trusted-firmware-a/build/rk3399/release/bl31/bl31.elf
-
 ```
 
 ### Finally... Run the Build
 
-After all that trouble, I'm ready to continue.
+After all that trouble, I'm ready to actually build the whole image.
 
 ```bash
-
 make CROSS_COMPILE=aarch64-linux-gnu- -j8
-
 ```
 
 Woohoo! Success! Worked on the first try. Probably only worked smoothly because
@@ -477,7 +459,6 @@ I'm going through the process slowly enough to write all of this up.
 The successful build process left us with lots of stuff, including:
 
 ```bash
-
 > ls -l *.img *.bin *.itb
 -rw-r--r-- 1 rjstone rjstone  397312 Jun 30 02:44 idbloader-spi.img
 -rw-r--r-- 1 rjstone rjstone  198656 Jun 30 02:44 idbloader.img
@@ -491,51 +472,49 @@ The successful build process left us with lots of stuff, including:
 -rw-r--r-- 1 rjstone rjstone 1068616 Jun 30 02:44 u-boot.bin
 -rw-r--r-- 1 rjstone rjstone 1069612 Jun 30 02:44 u-boot.img
 -rw-r--r-- 1 rjstone rjstone 1232384 Jun 30 02:44 u-boot.itb
-
 ```
 
-I know I'm supposed to be able to flash either `idbloader.img` and `u-boot.bin`
-or just `u-boot-rockchip.bin`, but what is all this stuff?
-
-
+I know I'm supposed to be able to flash `idbloader.img` and `u-boot.bin`, or
+just `u-boot-rockchip.bin` which combines the two, but what is all this other
+stuff? Tune in for a future episode this season where I will figure that out.
 
 ## Flashing/Writing The Boot Loader
 
-**Warning:** Don't just assume the memory layout of a firmware/boot loader image
-and just write it using the offsets shown below, even if the filenames look
-similar. Similar images that come with different OS distributions may contain
-other stuff, like disk partition information, intended to be written from offset
-0 but overwriting the partition table. In short, make sure you know what an
-image contains and what offset it should be written at before writing it.
-Otherwise you end up writing data where code is expected.
+**Warning:** Don't just assume the layout of a firmware/boot loader image
+you found and just write it using the offsets shown below, even if the filenames
+look similar. Similar images that come with different OS distributions may
+contain other stuff,
+[like disk partition information](https://salsa.debian.org/installer-team/debian-installer/-/blob/master/build/util/gen-hd-image),
+intended to be written from offset 0 because it includes a MBR and partition
+table. Make sure you know what a file contains and what offset it should be
+written at before writing it. Otherwise you end up with non-working binary at
+the entry points.
 
-### Disk-like Boot Devices and Disk Images
+### Block-Oriented Boot Devices and Images
 
-If we use the single image then we need to write it to the boot image or
+If we use the single image file then we need to write it to the "disk" image or
 device like this:
 
 ```bash
-
-sudo dd if=u-boot-rockchip.bin of=<boot file or /dev device> seek=64
+sudo dd if=u-boot-rockchip.bin of=<file or /dev device> seek=64
 sync
-
 ```
 
-The `seek=64` will skip 64 x 512B blocks in the output, or 32,768 bytes from the
-beginning.
+You may also want `conv=fsync,notrunc` if writing to a file.
+
+The `seek=64` will seek forward 64 * 512B blocks in the output, or 32,768 bytes
+from the beginning.
 
 If we need to write the seperate `.img` and `.idb` files, it should be done
 like this:
 
 ```bash
-
 sudo dd if=/boot/idbloader.img conv=notrunc seek=64    of=<dev or disk img>
 sudo dd if=/boot/u-boot.itb    conv=notrunc seek=16384 of=<dev or disk img>
-
 ```
 
-The single image ends up putting these at the same offsets when the whole thing
-is written starting from `seek=64`:
+The single image ends up putting these two at the same offsets when the whole
+thing is written starting from `seek=64`:
 
 ```bash
 > hexdump  u-boot-rockchip.bin -s 0x30690  | head -10
@@ -547,13 +526,12 @@ is written starting from `seek=64`:
 07f8000 0dd0 edfe 0000 000c 0000 3800 0000 c80a
 07f8010 0000 2800 0000 1100 0000 0200 0000 0000
 07f8020 0000 c800 0000 900a 0000 0000 0000 0000
-07f8030 0000 0000 0000 0000 0000 0100 0000 0000
-07f8040 0000 0300 0000 0400 0000 a200 6268 735c
 ```
 
-So idbloader.img (the first part) ends at about `0x3069a` (in this build), then
-is filled with all 1's (0xFF) until `0x7F800`, then the u-boot.itb part starts.
-(All 1's is the state of erased sdcard flash.)
+So `idbloader.img` (the first part) ends at about `0x3069A` (in this particular
+build), then is filled with all 1's (0xFF) until `0x7F800`, then the `u-boot.itb`
+part starts. (All 1's is the state of erased flash ram, and using that removes
+the need to write to a block after erasing it.)
 
 So that just saves some trouble, but it's the same thing in offset terms.
 
@@ -561,18 +539,21 @@ So that just saves some trouble, but it's the same thing in offset terms.
 
 #### Don't Do It
 
-The first reason why anyone who's a "noob" to this kind of thing (including
-me) shouldn't do this on a Pinebook Pro is that SPI has the highest boot
-priority, and if it's programmed with something that looks like it can boot,
-but actually locks the machine, then the PBP is semi-hard bricked and can't
-be unbricked without disabling the SPI flash chip somehow.
+At least on the Pinebook Pro with it's hard-coded [boot order](https://wiki.pine64.org/wiki/RK3399_boot_sequence#U-Boot_boot_sequence).
+
+The first reason why anyone who's a "noob" to this kind of thing (including me)
+shouldn't do this on a Pinebook Pro is that SPI has the highest boot priority,
+and if it's programmed with something that looks like it can boot, but instead
+hangs, then the PBP is hard bricked and can't be unbricked without disabling the
+SPI flash chip somehow. This normally requires a soldering iron, since there's
+no switch for it like there is with the eMMC.
 
 #### SDcards Are Convenient
 
 When testing out bootloaders on actual hardware, for the Pinebook Pro the
-easiest option is to erase the SPI (if there's anything there), erase the
-firmware areas of the internal eMMC, and just always boot from SDCard while
-you're tinkering.
+easiest option is to erase the SPI (if there's anything there, it's blank from
+the factory), erase the firmware areas of the internal eMMC, and just always
+boot from SDCard while you're tinkering.
 
 That's because the SDcard can be easily removed and reflashed, but it's less
 convenient to disble the eMMC (internal switch) and even more inconvenient to
@@ -582,22 +563,22 @@ disable the SPI flash (need soldering iron).
 
 I don't really want to provide directions for doing this mostly because I
 haven't done it myself, but unlike eMMC and sdcard devices, things like SPI
-flash chips are usually programmed with special utilities like
+flash chips are usually programmed with specialized utilities like
 [Linux MTD Utilities](http://www.linux-mtd.infradead.org/doc/general.html).
 
 The reason for this is that "MTD" flash devices are "raw" and "dumb" flash chips
 that don't do any automatic mapping of blocks for wear balancing, or automatic
-detection and unmapping of bad blocks. Software has to do that when programming
-them.
+detection and re/unmapping of bad blocks. Software has to do that when
+programming them.
 
 SDcards, USB flash drives, etc, all contain controllers that do this kind of
-smart stuff to create a translation layer in hardware that looks like a reliable
-block device. Under the hood, physical blocks are being remapped all over the
-place internally to avoid burning out the same physical blocks when the same
-logical block keeps getting overwritten.
+stuff to create a translation layer in hardware that looks like a reliable block
+device. Under the hood, physical blocks are being remapped all over the place
+internally to avoid burning out specific physical blocks when the same logical
+blocks keep getting overwritten.
 
-So trying to just `dd` to one of these devices would be a bad idea even if it
-were possible, because bad blocks wouldn't be detected, if nothing else.
+So trying to just `dd` to one of these devices would be a bad idea. If nothing
+else, bad blocks wouldn't be detected or dealt with.
 
 ### Pinebook Pro SPI Info
 
