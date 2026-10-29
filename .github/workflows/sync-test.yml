@@ -1,0 +1,53 @@
+name: "Sync test with main"
+
+# After anything lands on main (e.g. a squash-merged test -> main PR), merge
+# main back into test so the two branches don't diverge.
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-test
+  cancel-in-progress: false
+
+jobs:
+  merge-main-into-test:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.TEST_SITE_TOKEN }}
+    steps:
+      - name: Checkout test
+        uses: actions/checkout@v4
+        with:
+          ref: test
+          fetch-depth: 0
+
+      - name: Merge main into test
+        id: merge
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git fetch origin main
+          if git merge-base --is-ancestor origin/main HEAD; then
+            echo "test already contains main; nothing to do."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          # Fast-forwards when possible; otherwise creates a merge commit
+          if ! git merge --no-edit -m "Merge main into test" origin/main; then
+            git merge --abort
+            echo "::error::main does not merge cleanly into test; merge it by hand and resolve the conflicts."
+            exit 1
+          fi
+          git push origin HEAD:test
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      # Pushes made with GITHUB_TOKEN don't start other workflows, so start the
+      # test site deploy explicitly to keep test.rjstone.net in step with test
+      - name: Redeploy test.rjstone.net
+        if: steps.merge.outputs.changed == 'true' && env.GH_TOKEN != ''
+        run: gh workflow run deploy.yml --repo rjstone/rjstone-test -f ref=test
