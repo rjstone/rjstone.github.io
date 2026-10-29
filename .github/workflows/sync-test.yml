@@ -21,7 +21,7 @@ jobs:
       GH_TOKEN: ${{ secrets.TEST_SITE_TOKEN }}
     steps:
       - name: Checkout test
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           ref: test
           fetch-depth: 0
