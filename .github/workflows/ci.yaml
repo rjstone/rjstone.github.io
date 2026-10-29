@@ -25,3 +25,7 @@ jobs:
 
       - name: Run checks
         run: pnpm check
+
+      # Build sanity check (no deploy); this job is a required status check on main
+      - name: Build
+        run: pnpm build
