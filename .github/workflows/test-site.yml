@@ -1,0 +1,47 @@
+name: "Test site: build and deploy to test.rjstone.net"
+
+on:
+  push:
+    branches: [ test ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm i --frozen-lockfile
+
+      - name: Build
+        run: pnpm build
+
+  # The test site is a separate Pages site in rjstone/rjstone-test; its deploy
+  # workflow checks out this commit, builds it, and publishes it.
+  trigger-deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.TEST_SITE_TOKEN }}
+    steps:
+      - name: Start the deploy workflow in rjstone/rjstone-test
+        if: env.GH_TOKEN != ''
+        run: gh workflow run deploy.yml --repo rjstone/rjstone-test -f ref=${{ github.sha }}
+
+      - name: Explain skipped deploy
+        if: env.GH_TOKEN == ''
+        run: echo "::notice::TEST_SITE_TOKEN secret is not set; skipping the test site deploy."
