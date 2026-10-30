@@ -4,6 +4,10 @@ on:
   push:
   workflow_dispatch:
 
+# Lint/check/build only needs to read the repository
+permissions:
+  contents: read
+
 jobs:
   run-checks:
     runs-on: ubuntu-latest
